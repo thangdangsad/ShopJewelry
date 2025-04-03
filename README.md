@@ -1,2 +1,0 @@
-# ShopJewelry
-ASP.NET

@@ -138,5 +138,81 @@ namespace WebTrangSuc.Controllers
 
             return Json(new { success = false, message = "Sản phẩm không tồn tại." });
         }
+
+
+
+
+        // Thêm vào GioHangController.cs
+        //[HttpPost]
+        //public ActionResult MuaNgay(int id, int soLuong)
+        //{
+        //    if (Session["NguoiDungID"] == null)
+        //    {
+        //        return Json(new { success = false, message = "Bạn cần đăng nhập để mua hàng!" });
+        //    }
+
+        //    int nguoiDungID = Convert.ToInt32(Session["NguoiDungID"]);
+
+        //    // Xóa giỏ hàng hiện tại (nếu có)
+        //    var currentCartItems = db.GioHangs.Where(g => g.NguoiDungID == nguoiDungID).ToList();
+        //    db.GioHangs.RemoveRange(currentCartItems);
+
+        //    // Thêm sản phẩm muốn mua ngay vào giỏ hàng
+        //    var gioHangItem = new GioHang
+        //    {
+        //        NguoiDungID = nguoiDungID,
+        //        SanPhamID = id,
+        //        SoLuong = soLuong
+        //    };
+        //    db.GioHangs.Add(gioHangItem);
+
+        //    db.SaveChanges();
+
+        //    return Json(new { success = true });
+        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MuaNgay(int id, int soLuong)
+        {
+            if (Session["NguoiDungID"] == null)
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    Response.StatusCode = 401; // Unauthorized
+                    return Content("Unauthorized", "text/plain");
+                }
+                return RedirectToAction("Login", "Login");
+            }
+
+            int nguoiDungID = Convert.ToInt32(Session["NguoiDungID"]);
+
+            try
+            {
+                // Xóa giỏ hàng hiện tại
+                var currentCartItems = db.GioHangs.Where(g => g.NguoiDungID == nguoiDungID).ToList();
+                db.GioHangs.RemoveRange(currentCartItems);
+
+                // Thêm sản phẩm mới
+                var gioHangItem = new GioHang
+                {
+                    NguoiDungID = nguoiDungID,
+                    SanPhamID = id,
+                    SoLuong = soLuong
+                };
+                db.GioHangs.Add(gioHangItem);
+                db.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+
     }
+
 }

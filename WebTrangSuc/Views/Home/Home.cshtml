@@ -111,8 +111,8 @@
                                                 </a>
                                             </div>
                                             <div class="hover-buttons">
-                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
-                                                <a href="@Url.Action("ThanhToan", "GioHang", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Mua ngay</a>
+                                                @*<a href="@Url.Action("ThanhToan", "GioHang", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>*@
                                             </div>
                                         </div>
                                     </div>
@@ -188,8 +188,8 @@
                                                 </a>
                                             </div>
                                             <div class="hover-buttons">
-                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
-                                                <a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Mua ngay</a>
+                                                @*<a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>*@
                                             </div>
                                         </div>
                                     </div>
@@ -241,6 +241,7 @@
                     </div>
                     <p id="stockMessage" class="text-warning small"></p>
                     <button class="btn btn-dark" id="addToCartBtn">Thêm vào giỏ hàng</button>
+                    <button class="btn btn-dark" id="detailBtn">Chi tiết</button>
                 </div>
             </div>
         </div>
@@ -250,109 +251,62 @@
 
 @section scripts {
     <script>
-        $(document).ready(function () {
-            var stockQty = 0;
+        // Xử lý nút Chi tiết trong modal
+        $(document).on('click', '#detailBtn', function() {
+            var productId = $(this).data('id');
+            if (productId) {
+                // Đóng modal
+                $('#productDetailModal').modal('hide');
 
-            // Click mở modal chi tiết sản phẩm
-            $(".open-detail").click(function () {
-                var productId = $(this).data("id");
-                $.ajax({
-                    url: '@Url.Action("GetProductDetail", "Home")',
-                    type: 'GET',
-                    data: { id: productId },
-                    success: function (response) {
-                        if (response.success) {
-                            var product = response.data;
-                            var imagePath = product.HinhAnh.replace("~", "");
-                            if (!imagePath.startsWith('/')) {
-                                imagePath = '/' + imagePath;
-                            }
-                            $("#productImage").attr("src", imagePath);
-                            $("#productName").text(product.TenSanPham);
-                            $("#productTitle").text(product.TenSanPham);
-                            stockQty = product.SoLuong;
+                // Chuyển hướng đến trang chi tiết sản phẩm
+                window.location.href = '@Url.Action("ChiTiet", "SanPham")/' + productId;
+            }
+        });
 
-                            // Hiển thị giá giảm nếu có
-                            if (product.GiaGiam != null && product.GiaGiam > 0) {
-                                $("#productPrice").text(product.GiaGiam.toLocaleString('vi-VN') + ' đ');
-                                $("#productOldPrice").text(product.Gia.toLocaleString('vi-VN') + ' đ');
-                            } else {
-                                $("#productPrice").text(product.Gia.toLocaleString('vi-VN') + ' đ');
-                                $("#productOldPrice").text('');
-                            }
-
-                            $("#quantityInput").val(1);
-                            $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
-
-                            // Gán id sản phẩm vào nút Thêm giỏ hàng
-                            $("#addToCartBtn").data("id", product.SanPhamID);
-
-                            $("#productDetailModal").modal('show');
+        // Cập nhật hàm open-detail để gán ID sản phẩm cho nút Chi tiết
+        $(".open-detail").click(function () {
+            var productId = $(this).data("id");
+            $.ajax({
+                url: '@Url.Action("GetProductDetail", "Home")',
+                type: 'GET',
+                data: { id: productId },
+                success: function (response) {
+                    if (response.success) {
+                        var product = response.data;
+                        var imagePath = product.HinhAnh.replace("~", "");
+                        if (!imagePath.startsWith('/')) {
+                            imagePath = '/' + imagePath;
                         }
-                    }
-                });
-            });
+                        $("#productImage").attr("src", imagePath);
+                        $("#productName").text(product.TenSanPham);
+                        $("#productTitle").text(product.TenSanPham);
+                        stockQty = product.SoLuong;
 
-            // Tăng số lượng
-            $("#increaseQty").click(function () {
-                var current = parseInt($("#quantityInput").val());
-                if (current < stockQty) {
-                    $("#quantityInput").val(current + 1);
-                    $("#stockMessage").text('');
-                } else {
-                    $("#stockMessage").text('Vượt quá số lượng sản phẩm trong kho!');
-                }
-            });
-
-            // Giảm số lượng
-            $("#decreaseQty").click(function () {
-                var current = parseInt($("#quantityInput").val());
-                if (current > 1) {
-                    $("#quantityInput").val(current - 1);
-                    $("#stockMessage").text('');
-                }
-            });
-
-            // Thêm giỏ hàng + chuyển sang trang giỏ hàng
-            $("#addToCartBtn").click(function () {
-                var productId = $(this).data("id");
-                var quantity = parseInt($("#quantityInput").val());
-
-                if (productId == null || productId == undefined) {
-                    alert("Lỗi: Không tìm thấy sản phẩm!");
-                    return;
-                }
-
-                $.ajax({
-                    url: '@Url.Action("ThemVaoGio", "GioHang")',
-                    type: 'POST',
-                    data: { id: productId, soLuong: quantity },
-                    success: function (res) {
-                        if (res.success) {
-                            alert("Đã thêm vào giỏ hàng!");
-                            $('#productDetailModal').modal('hide');
-
-                            // Cập nhật số lượng giỏ hàng trên header
-                            if (res.soLuongGioHang > 0) {
-                                $("#cartCount").removeClass("d-none").text(res.soLuongGioHang);
-                            } else {
-                                $("#cartCount").addClass("d-none").text(0);
-                            }
-                            //window.location.href = '@Url.Action("GioHang", "GioHang")';
-                         
+                        // Hiển thị giá giảm nếu có
+                        if (product.GiaGiam != null && product.GiaGiam > 0) {
+                            $("#productPrice").html(product.GiaGiam.toLocaleString('vi-VN') + ' ₫');
+                            $("#productOldPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
                         } else {
-                            alert(res.message);
-                             if (res.message.includes("đăng nhập")) {
-                            // Nếu báo cần đăng nhập thì chuyển sang Login
-                            window.location.href = '@Url.Action("Login", "Login")';
-        }
+                            $("#productPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
+                            $("#productOldPrice").text('');
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Lỗi server: " + xhr.responseText);
-                    }
 
-                });
+                        $("#quantityInput").val(1);
+                        $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
+
+                        // Gán id sản phẩm vào các nút
+                        $("#addToCartBtn").data("id", product.SanPhamID);
+                        $("#detailBtn").data("id", product.SanPhamID);
+                        $("#buyNowBtn").data("id", product.SanPhamID);
+
+                        $("#productDetailModal").modal('show');
+                    } else {
+                        alert("Không tìm thấy sản phẩm!");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Lỗi server: " + xhr.responseText);
+                }
             });
         });
     </script>

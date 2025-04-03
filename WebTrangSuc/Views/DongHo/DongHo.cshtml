@@ -105,8 +105,8 @@
                                 </div>
                             </div>
                             <div class="hover-buttons mt-2">
-                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
-                                <a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Mua ngay</a>
+                                @*<a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>*@
                             </div>
                         </div>
                     </div>
@@ -156,6 +156,7 @@
                         </div>
                         <p id="stockMessage" class="text-warning small mb-3"></p>
                         <button class="btn btn-dark w-100" id="addToCartBtn">Thêm vào giỏ hàng</button>
+                        <button class="btn btn-danger w-100" id="detailBtn">Chi tiết</button>
                     </div>
                 </div>
             </div>
@@ -165,115 +166,128 @@
 
     @section scripts {
         <script>
-        $(document).ready(function () {
-            var stockQty = 0;
+ $(document).on('click', '#detailBtn', function() {
+ var productId = $(this).data('id');
+ if (productId) {
+     // Đóng modal
+     $('#productDetailModal').modal('hide');
 
-            // Click mở modal chi tiết sản phẩm
-            $(".open-detail").click(function () {
-                var productId = $(this).data("id");
-                $.ajax({
-                    url: '@Url.Action("GetProductDetail", "Home")',
-                    type: 'GET',
-                    data: { id: productId },
-                    success: function (response) {
-                        if (response.success) {
-                            var product = response.data;
-                            var imagePath = product.HinhAnh.replace("~", "");
-                            if (!imagePath.startsWith('/')) {
-                                imagePath = '/' + imagePath;
-                            }
-                            $("#productImage").attr("src", imagePath);
-                            $("#productName").text(product.TenSanPham);
-                            $("#productTitle").text(product.TenSanPham);
-                            stockQty = product.SoLuong;
+     // Chuyển hướng đến trang chi tiết sản phẩm
+     window.location.href = '@Url.Action("ChiTiet", "SanPham")/' + productId;
+     }
+ });
+ $(document).ready(function () {
+     var stockQty = 0;
 
-                            // Hiển thị giá giảm nếu có
-                            if (product.GiaGiam != null && product.GiaGiam > 0) {
-                                $("#productPrice").html(product.GiaGiam.toLocaleString('vi-VN') + ' ₫');
-                                $("#productOldPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
-                            } else {
-                                $("#productPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
-                                $("#productOldPrice").text('');
-                            }
 
-                            $("#quantityInput").val(1);
-                            $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
+     // Click mở modal chi tiết sản phẩm
+     $(".open-detail").click(function () {
+         var productId = $(this).data("id");
+         $.ajax({
+             url: '@Url.Action("GetProductDetail", "Home")',
+             type: 'GET',
+             data: { id: productId },
+             success: function (response) {
+                 if (response.success) {
+                     var product = response.data;
+                     var imagePath = product.HinhAnh.replace("~", "");
+                     if (!imagePath.startsWith('/')) {
+                         imagePath = '/' + imagePath;
+                     }
+                     $("#productImage").attr("src", imagePath);
+                     $("#productName").text(product.TenSanPham);
+                     $("#productTitle").text(product.TenSanPham);
+                     stockQty = product.SoLuong;
 
-                            // Gán id sản phẩm vào nút Thêm giỏ hàng
-                            $("#addToCartBtn").data("id", product.SanPhamID);
+                     // Hiển thị giá giảm nếu có
+                     if (product.GiaGiam != null && product.GiaGiam > 0) {
+                         $("#productPrice").html(product.GiaGiam.toLocaleString('vi-VN') + ' ₫');
+                         $("#productOldPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
+                     } else {
+                         $("#productPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
+                         $("#productOldPrice").text('');
+                     }
 
-                            $("#productDetailModal").modal('show');
-                        } else {
-                            alert("Không tìm thấy sản phẩm!");
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Lỗi server: " + xhr.responseText);
-                    }
-                });
-            });
+                     $("#quantityInput").val(1);
+                     $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
 
-            // Tăng số lượng
-            $("#increaseQty").click(function () {
-                var current = parseInt($("#quantityInput").val());
-                if (current < stockQty) {
-                    $("#quantityInput").val(current + 1);
-                    $("#stockMessage").text('');
-                } else {
-                    $("#stockMessage").text('Vượt quá số lượng sản phẩm trong kho!');
-                }
-            });
+                     // Gán id sản phẩm vào nút Thêm giỏ hàng
+                     $("#addToCartBtn").data("id", product.SanPhamID);
+                     $("#detailBtn").data("id", product.SanPhamID);
 
-            // Giảm số lượng
-            $("#decreaseQty").click(function () {
-                var current = parseInt($("#quantityInput").val());
-                if (current > 1) {
-                    $("#quantityInput").val(current - 1);
-                    $("#stockMessage").text('');
-                }
-            });
+                     $("#productDetailModal").modal('show');
+                 } else {
+                     alert("Không tìm thấy sản phẩm!");
+                 }
+             },
+             error: function (xhr, status, error) {
+                 alert("Lỗi server: " + xhr.responseText);
+             }
+         });
+     });
 
-            // Thêm giỏ hàng + chuyển sang trang giỏ hàng
-            $("#addToCartBtn").click(function () {
-                var productId = $(this).data("id");
-                var quantity = parseInt($("#quantityInput").val());
 
-                if (!productId) {
-                    alert("Lỗi: Không tìm thấy sản phẩm!");
-                    return;
-                }
 
-                $.ajax({
-                    url: '@Url.Action("ThemVaoGio", "GioHang")',
-                    type: 'POST',
-                    data: { id: productId, soLuong: quantity },
-                    success: function (res) {
-                        if (res.success) {
-                            alert("Đã thêm vào giỏ hàng!");
-                            $('#productDetailModal').modal('hide');
+     // Tăng số lượng
+     $("#increaseQty").click(function () {
+         var current = parseInt($("#quantityInput").val());
+         if (current < stockQty) {
+             $("#quantityInput").val(current + 1);
+             $("#stockMessage").text('');
+         } else {
+             $("#stockMessage").text('Vượt quá số lượng sản phẩm trong kho!');
+         }
+     });
 
-                            // Cập nhật số lượng giỏ hàng trên header
-                            if (res.soLuongGioHang > 0) {
-                                $("#cartCount").removeClass("d-none").text(res.soLuongGioHang);
-                            } else {
-                                $("#cartCount").addClass("d-none").text(0);
-                            }
-                            window.location.href = '@Url.Action("GioHang", "GioHang")';
+     // Giảm số lượng
+     $("#decreaseQty").click(function () {
+         var current = parseInt($("#quantityInput").val());
+         if (current > 1) {
+             $("#quantityInput").val(current - 1);
+             $("#stockMessage").text('');
+         }
+     });
 
-                        } else {
-                            alert(res.message);
-                            if (res.message.includes("đăng nhập")) {
-                                // Nếu báo cần đăng nhập thì chuyển sang Login
-                                window.location.href = '@Url.Action("Login", "Login")';
-                            }
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Lỗi server: " + xhr.responseText);
-                    }
+     // Thêm giỏ hàng + chuyển sang trang giỏ hàng
+     $("#addToCartBtn").click(function () {
+         var productId = $(this).data("id");
+         var quantity = parseInt($("#quantityInput").val());
 
-                });
-            });
-        });
+         if (!productId) {
+             alert("Lỗi: Không tìm thấy sản phẩm!");
+             return;
+         }
+         $.ajax({
+             url: '@Url.Action("ThemVaoGio", "GioHang")',
+             type: 'POST',
+             data: { id: productId, soLuong: quantity },
+             success: function (res) {
+                 if (res.success) {
+                     alert("Đã thêm vào giỏ hàng!");
+                     $('#productDetailModal').modal('hide');
+
+                     // Cập nhật số lượng giỏ hàng trên header
+                     if (res.soLuongGioHang > 0) {
+                         $("#cartCount").removeClass("d-none").text(res.soLuongGioHang);
+                     } else {
+                         $("#cartCount").addClass("d-none").text(0);
+                     }
+                     window.location.href = '@Url.Action("GioHang", "GioHang")';
+
+                 } else {
+                     alert(res.message);
+                     if (res.message.includes("đăng nhập")) {
+                         // Nếu báo cần đăng nhập thì chuyển sang Login
+                         window.location.href = '@Url.Action("Login", "Login")';
+                     }
+                 }
+             },
+             error: function (xhr, status, error) {
+                 alert("Lỗi server: " + xhr.responseText);
+             }
+
+         });
+     });
+ });
         </script>
     }

@@ -1,9 +1,14 @@
 ﻿@model WebTrangSuc.Models.SanPham
 
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
 @{
     ViewBag.Title = Model.TenSanPham;
     Layout = "~/Views/Shared/_TaiKhoanLayout.cshtml";
 }
+
 
 @section Styles {
     <link href="~/Content/ChiTietSanPham.css" rel="stylesheet" />
@@ -69,7 +74,7 @@
 
                     <button class="btn btn-danger mb-2 px-4 py-2"
                             onclick="buyNow(@Model.SanPhamID, @Model.SoLuong)">
-                        Mua ngay
+                        <i class="fas fa-bolt me-2"></i>Mua ngay
                     </button>
                 </div>
             </div>
@@ -152,39 +157,56 @@
                 });
         }
 
-        function buyNow(id, availableQty) {
-            let quantity = parseInt(document.getElementById("quantity").value);
+        function buyNow(productId, maxQuantity) {
+            const quantity = parseInt(document.getElementById('quantity').value);
 
-            if (availableQty === 0) {
-                alert("Sản phẩm đã hết hàng!");
+            // Kiểm tra số lượng
+            if (quantity <= 0 || quantity > maxQuantity) {
+                alert(`Số lượng phải từ 1 đến ${maxQuantity}`);
                 return;
             }
 
-            if (quantity > availableQty) {
-                alert("Số lượng vượt quá tồn kho!");
-                return;
+            // Tạo form data
+            const formData = new FormData();
+            formData.append('id', productId);
+            formData.append('soLuong', quantity);
+
+            // Thêm anti-forgery token nếu cần
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+            if (token) {
+                formData.append('__RequestVerificationToken', token);
             }
 
             fetch('/GioHang/MuaNgay', {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: id,
-                    soLuong: quantity
-                })
+                    'Accept': 'application/json'
+                }
             })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/ThanhToan/Index';
+                .then(async response => {
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Lỗi server');
+                    }
+
+                    if (data.requireLogin) {
+                        window.location.href = `/Login/Login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
+                        return;
+                    }
+
+                    if (data.success) {
+                        window.location.href = data.redirectUrl || '/ThanhToan/ThanhToan';
                     } else {
-                        return response.text().then(text => { throw new Error(text); });
+                        alert(data.message || 'Có lỗi xảy ra');
                     }
                 })
                 .catch(error => {
-                    alert("Có lỗi khi mua ngay: " + error.message);
+                    console.error('Error:', error);
+                    alert(error.message || 'Lỗi khi thực hiện mua ngay');
                 });
         }
+
     </script>
 }

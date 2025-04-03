@@ -106,8 +106,9 @@
                                 </div>
                             </div>
                             <div class="hover-buttons mt-2">
-                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
-                                <a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                @*<a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>*@
+                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Mua ngay</a>
+                               
 
                             </div>
                         </div>
@@ -158,6 +159,7 @@
                         </div>
                         <p id="stockMessage" class="text-warning small mb-3"></p>
                         <button class="btn btn-dark w-100" id="addToCartBtn">Thêm vào giỏ hàng</button>
+                        <button class="btn btn-danger w-100" id="detailBtn">Chi tiết</button>
                     </div>
                 </div>
             </div>
@@ -167,8 +169,19 @@
 
     @section scripts {
         <script>
+        $(document).on('click', '#detailBtn', function() {
+        var productId = $(this).data('id');
+        if (productId) {
+            // Đóng modal
+            $('#productDetailModal').modal('hide');
+
+            // Chuyển hướng đến trang chi tiết sản phẩm
+            window.location.href = '@Url.Action("ChiTiet", "SanPham")/' + productId;
+            }
+        });
         $(document).ready(function () {
             var stockQty = 0;
+
 
             // Click mở modal chi tiết sản phẩm
             $(".open-detail").click(function () {
@@ -203,6 +216,7 @@
 
                             // Gán id sản phẩm vào nút Thêm giỏ hàng
                             $("#addToCartBtn").data("id", product.SanPhamID);
+                            $("#detailBtn").data("id", product.SanPhamID);
 
                             $("#productDetailModal").modal('show');
                         } else {
@@ -214,6 +228,8 @@
                     }
                 });
             });
+
+
 
             // Tăng số lượng
             $("#increaseQty").click(function () {
@@ -244,7 +260,6 @@
                     alert("Lỗi: Không tìm thấy sản phẩm!");
                     return;
                 }
-
                 $.ajax({
                     url: '@Url.Action("ThemVaoGio", "GioHang")',
                     type: 'POST',
