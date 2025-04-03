@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lily and Lage Jewelry - Trang chủ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" />
+</head>
+<body>
+    <header class="header">
+        <div class="container d-flex align-items-center justify-content-between py-3 px-4">
+            <div class="logo me-auto">
+                <a href="@Url.Action("Home", "Home")" class="logo-link">
+                    <div class="logo-middle">Lily and Lage</div>
+                    <div class="logo-bottom">JEWELRY</div>
+                </a>
+            </div>
+            <nav class="nav ms-auto">
+                <ul class="d-flex align-items-center m-0 p-0 list-unstyled">
+                    <li class="mx-3"><a href="@Url.Action("Home", "Home")">Trang chủ</a></li>
+
+                    @if (Session["VaiTro"] != null && Session["VaiTro"].ToString() == "Admin")
+                    {
+                        <li class="mx-3"><a href="@Url.Action("SanPhamAdmin", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm (Admin)</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="sanPhamDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sản phẩm
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="sanPhamDropdown">
+                                <a class="dropdown-item" href="@Url.Action("TrangSucCuoi", "TrangSucCuoi")">Trang Sức Cưới</a>
+                                <a class="dropdown-item" href="@Url.Action("DongHo", "DongHo")">Đồng Hồ</a>
+                            </div>
+                        </li>
+                    }
+
+
+                    <li class="mx-3"><a href="@Url.Action("Index", "GioiThieu")" class="nav-link">Giới Thiệu</a></li>
+
+                    <li class="mx-3">
+                        <a href="@Url.Action("Index", "TinTuc")" class="nav-link">Tin tức</a>
+                    </li>
+                    <li class="dropdown mx-3 position-relative">
+                        @if (Session["TenDangNhap"] == null)
+                        {
+                            <div class="dropdown-toggle">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("Login", "Login")">Đăng nhập</a>
+                                <a href="@Url.Action("Register", "Register")">Đăng ký</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="dropdown-toggle">
+                                <i class="fas fa-user"></i> @Session["TenDangNhap"]
+                            </div>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("TaiKhoan", "ThongTinTk")">Tài khoản</a>
+                                <a href="@Url.Action("Logout", "Login")">Đăng xuất</a>
+                            </div>
+                        }
+                    </li>
+                    <li class="mx-3 position-relative">
+                        <a href="@Url.Action("GioHang", "GioHang")" class="nav-link position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                                @Session["SoLuongGioHang"]
+                            </span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row text-start">
+                <!-- Logo & Contact Info -->
+                <div class="col-lg-4 mb-4">
+                    <div class="d-flex flex-column align-items-start">
+                        <!-- Logo -->
+                        <a href="@Url.Action("Home", "Home")" class="logo-link mb-3 text-decoration-none">
+                            <div class="logo-middle">Lily and Lage</div>
+                            <div class="logo-bottom">JEWELRY</div>
+                        </a>
+
+                        <!-- Thông tin liên hệ -->
+                        <div class="contact-info">
+                            <p><i class="fas fa-map-marker-alt me-2 text-danger"></i>266 Đội Cấn, Liễu Giai, Hà Nội</p>
+                            <p><i class="fas fa-envelope me-2 text-danger"></i>support@sapo.vn</p>
+                            <p><i class="fas fa-phone me-2 text-danger"></i>1800 6750</p>
+                            <p><i class="fas fa-store me-2 text-danger"></i>Hệ thống cửa hàng</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Customer Support -->
+                <div class="col-lg-2 mb-4">
+                    <h6 class="fw-bold mb-3 text-uppercase">Hỗ trợ khách hàng</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Trang chủ</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Giới thiệu</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Sản phẩm</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Liên hệ</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Tin tức</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Giỏ hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Tìm kiếm</a></li>
+                    </ul>
+                </div>
+
+                <!-- Policy -->
+                <div class="col-lg-2 mb-4">
+                    <h6 class="fw-bold mb-3 text-uppercase">Chính sách</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Trang chủ</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Giới thiệu</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Sản phẩm</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Liên hệ</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Tin tức</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Giỏ hàng</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark d-block mb-2">Tìm kiếm</a></li>
+                    </ul>
+                </div>
+
+                <!-- Opening Hours -->
+                <div class="col-lg-4 mb-4">
+                    <h6 class="fw-bold mb-3 text-uppercase">Giờ mở cửa</h6>
+                    <p class="mb-2">Từ 9:00 - 21:30 tất cả các ngày trong tuần (bao gồm cả các ngày lễ, ngày Tết).</p>
+                    <h6 class="fw-bold mb-2 text-uppercase">Góp ý, khiếu nại</h6>
+                    <p><i class="fas fa-phone me-2 text-danger"></i>1900 6750</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p>© 2025 Lily and Lage Jewelry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+        <div>Lên đầu trang</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Hover dropdown effect
+        $('.dropdown').hover(function () {
+            $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
+        }, function () {
+            $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
+        });
+        // Click vào nút back to top
+        $('#backToTop').click(function () {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+        });
+
+        // Hiện nút back to top khi scroll xuống
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('#backToTop').fadeIn();
+            } else {
+                $('#backToTop').fadeOut();
+            }
+        });
+
+        // Ẩn nút lúc đầu
+        $('#backToTop').hide();
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,162 @@
+﻿/* Header style */
+.header {
+    background-color: #FFE6D4;
+    padding: 5px 0; /* Giảm padding top và bottom */
+    margin-bottom: 0; /* Xóa margin dưới */
+    border-bottom: 1px solid #ddd;
+}
+
+    .header .logo-link {
+        text-decoration: none;
+        color: #000;
+    }
+
+.logo-middle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+    color: #000;
+    text-align: center;
+}
+
+.logo-bottom {
+    font-size: 14px;
+    color: #000;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* Nav links */
+.nav .nav-link {
+    color: #000;
+    font-weight: bold;
+    margin: 0 12px;
+    cursor: pointer;
+}
+
+    .nav .nav-link:hover {
+        color: #c59c5d;
+    }
+
+/* Dropdown menu */
+.header .dropdown-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 150px;
+    padding: 0;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.header .dropdown-item {
+    padding: 10px 15px;
+    color: #000;
+    text-decoration: none;
+    display: block;
+}
+
+    .header .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+
+/* Breadcrumb and main content adjustment */
+.breadcrumb-wrapper, .main-content, .container {
+    margin-top: 10px !important; /* Giảm khoảng cách top */
+    padding-top: 0 !important;
+}
+
+.breadcrumb {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* Main content */
+.main-content {
+    padding-top: 20px; /* Giảm padding top */
+    min-height: 70vh;
+}
+
+/* Footer */
+/* Logo chỉnh kích thước và margin */
+.footer .logo-link {
+    display: block;
+    text-align: left; /* Căn trái logo */
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.footer .logo-middle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 24px;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.footer .logo-bottom {
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-top: 0;
+}
+
+/* Căn trái thông tin */
+.footer .contact-info p {
+    margin: 4px 0;
+    font-size: 14px;
+    text-align: left;
+}
+
+
+.footer {
+    background-color: #FFE6D4;
+    color: #333;
+}
+
+    .footer a {
+        color: #333; /* Mặc định link đen */
+        text-decoration: none; /* Không gạch chân */
+    }
+
+        .footer a:hover {
+            color: #b35c3d; /* Đổi màu chữ khi hover, chọn màu phù hợp, ví dụ nâu nhạt */
+            text-decoration: underline;
+        }
+
+.back-to-top {
+    position: fixed; /* Cố định vị trí */
+    bottom: 50px; /* Cách đáy 50px */
+    right: 30px; /* Cách phải 30px */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 999; /* Luôn nằm trên */
+    transition: all 0.3s ease;
+}
+
+    .back-to-top:hover {
+        background-color: #f6d1c1; /* Màu hover */
+        color: #fff;
+    }
+
+    .back-to-top div {
+        display: none; /* Ẩn chữ nhỏ */
+    }
+
+    .back-to-top i {
+        font-size: 18px;
+        color: #333;
+    }

@@ -1,0 +1,137 @@
+﻿@model WebTrangSuc.Models.SanPham
+
+@{
+    ViewBag.Title = "Sửa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/Content/SanPhamAdmin.css" />
+<h2>Sửa sản phẩm</h2>
+
+@using (Html.BeginForm("Edit", "SanPhamAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.SanPhamID)
+
+    <div class="form-horizontal">
+        <!-- Tên sản phẩm -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.TenSanPham, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.TenSanPham, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TenSanPham, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Loại sản phẩm -->
+        <div class="form-group">
+            @Html.Label("Loại sản phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.IDLoaiSp, (SelectList)ViewBag.IDLoaiSp, "-- Chọn loại --",
+                    new { @class = "form-control", required = "required" })
+                <span class="text-danger" id="LoaiSpError"></span>
+            </div>
+        </div>
+
+
+        <!-- Giá -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.Gia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Gia, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Gia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Giá giảm -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.GiaGiam, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.GiaGiam, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(m => m.GiaGiam, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Giảm giá (%) -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.GiamGia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.GiamGia, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.GiamGia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Số lượng -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.SoLuong, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.SoLuong, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.SoLuong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Mô tả -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.MoTa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.MoTa, new { @class = "form-control", rows = 5 })
+                @Html.ValidationMessageFor(m => m.MoTa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Hình ảnh -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.HinhAnh, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="UploadImage" class="form-control" />
+                @if (!string.IsNullOrEmpty(Model.HinhAnh))
+                {
+                    <img src="@Url.Content(Model.HinhAnh)" width="120" height="120" style="margin-top:10px;" />
+                }
+            </div>
+        </div>
+
+        <!-- Nút Lưu & Quay lại -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-success" />
+                @Html.ActionLink("Quay lại", "Info", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Hàm cập nhật giá sau giảm giá
+        function updateGiaGiam() {
+            var gia = parseFloat($("#Gia").val()) || 0;
+            var giamGia = parseFloat($("#GiamGia").val()) || 0;
+            var giaGiam = gia - (gia * giamGia / 100);
+            $("#GiaGiam").val(giaGiam.toFixed(2)); // Giữ 2 số thập phân
+        }
+
+        $(document).ready(function () {
+            // Khi load trang, tính sẵn giá sau giảm
+            updateGiaGiam();
+
+            // Khi thay đổi Giá hoặc Giảm Giá %, tự tính lại
+            $("#Gia, #GiamGia").on("input", function () {
+                updateGiaGiam();
+            });
+
+            // Validate chọn loại sản phẩm khi submit
+            $('form').submit(function (e) {
+                var selectedLoaiSp = $('#IDLoaiSp').val();
+                if (selectedLoaiSp === "" || selectedLoaiSp === "0") {
+                    e.preventDefault();
+                    $('#LoaiSpError').text('Vui lòng chọn loại sản phẩm');
+                } else {
+                    $('#LoaiSpError').text('');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,360 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<WebTrangSuc.Models.SanPham>
+
+<!-- Banner Section -->
+<section class="banner">
+    <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="@Url.Content("~/images/SlideBanner1.jpg")" class="banner-image" />
+            </div>
+            <div class="carousel-item">
+                <img src="@Url.Content("~/images/SlideBanner5.jpg")" class="banner-image" />
+            </div>
+            <div class="carousel-item">
+                <img src="@Url.Content("~/images/SlideBanner4.jpg")" class="banner-image" />
+            </div>
+            <div class="carousel-item">
+                <img src="@Url.Content("~/images/SlideBanner2.png")" class="banner-image" />
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBanner" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselBanner" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>
+
+<!-- Promo Section -->
+<section class="promo">
+    <div class="promo-container">
+        <div class="promo-left">
+            <video autoplay muted loop class="promo-video">
+                <source src="@Url.Content("~/video/promo.mp4")" type="video/mp4" />
+            </video>
+        </div>
+        <div class="promo-right">
+            <div class="promo-feature">
+                <img src="@Url.Content("~/images/payment-icon.png")" />
+                <div>
+                    <h4>Thanh toán</h4>
+                    <p>Khách hàng có thể lựa chọn một hoặc nhiều hình thức thanh toán</p>
+                </div>
+            </div>
+            <div class="promo-feature">
+                <img src="@Url.Content("~/images/hang-Authentic.jpg")" />
+                <div>
+                    <h4>Cam kết chính hãng</h4>
+                    <p>Chúng tôi cam kết hàng chính hãng và đảm bảo về chất lượng sản phẩm</p>
+                </div>
+            </div>
+            <div class="promo-feature">
+                <img src="@Url.Content("~/images/fast-icon.jpg")" />
+                <div>
+                    <h4>Siêu tốc 2H</h4>
+                    <p>Dịch vụ giao hàng nhanh 2h trong nội thành Hà Nội</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section Title Tách Riêng -->
+<section class="product-new-title">
+    <div class="newcontainer">
+        <div class="title-box">
+            <h2 class="section-title">KHUYẾN MÃI</h2>
+        </div>
+    </div>
+</section>
+<!-- Product & Promo Section -->
+<section class="product-promo">
+    <div class="container">
+        <!-- Slider sản phẩm -->
+        <div class="product-slider">
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var group in ((List<WebTrangSuc.Models.SanPham>)ViewBag.PromoProducts)
+                            .Select((product, index) => new { product, index })
+                            .GroupBy(x => x.index / 3))
+                    {
+                        <div class="carousel-item @(group.Key == 0 ? "active" : "")">
+                            <div class="product-group">
+                                @foreach (var item in group)
+                                {
+                                    <div class="product-card position-relative">
+                                        @if (item.product.GiamGia != null)
+                                        {
+                                            <div class="discount">-@item.product.GiamGia%</div>
+                                        }
+                                        <img src="@Url.Content("~/" + item.product.HinhAnh)" alt="@item.product.TenSanPham" />
+                                        <h4 class="product-title">@item.product.TenSanPham</h4>
+                                        <p class="price">
+                                            @if (item.product.GiaGiam != null)
+                                            {
+                                                <span class="new-price">@item.product.GiaGiam$</span>
+                                                <span class="old-price">@item.product.Gia$</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="new-price">@item.product.Gia$</span>
+                                            }
+                                        </p>
+                                        <!-- Hover Layer -->
+                                        <div class="product-hover">
+                                            <div class="hover-icon">
+                                                <a href="javascript:void(0)" class="open-detail" data-id="@item.product.SanPhamID">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </div>
+                                            <div class="hover-buttons">
+                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
+                                                <a href="@Url.Action("ThanhToan", "GioHang", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Ảnh quảng cáo -->
+        <div class="promo-banner">
+            <img src="@Url.Content("~/images/qc.png")" alt="Promo Banner">
+        </div>
+    </div>
+</section>
+<!-- Sản phẩm mới -->
+<!-- Section Title Tách Riêng -->
+<section class="product-new-title">
+    <div class="newcontainer">
+        <div class="title-box">
+            <h2 class="section-title">HÀNG MỚI VỀ</h2>
+        </div>
+    </div>
+</section>
+
+
+<!-- Carousel Section -->
+<section class="product-new">
+    <div class="container">
+        <div class="newproduct-slider">
+            <div id="newProductCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators -->
+                <div class="carousel-indicators">
+                    @{
+                        var productGroups = ((List<WebTrangSuc.Models.SanPham>)ViewBag.RandomProducts)
+                     .Select((product, index) => new { product, index })
+                     .GroupBy(x => x.index / 5)
+                     .ToList();
+
+                        for (int i = 0; i < productGroups.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#newProductCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+                        }
+                    }
+                </div>
+
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    @foreach (var group in productGroups.Select((grp, i) => new { grp, i }))
+                    {
+                        <div class="carousel-item @(group.i == 0 ? "active" : "")">
+                            <div class="newproduct-group d-flex justify-content-between flex-wrap">
+                                @foreach (var item in group.grp)
+                                {
+                                    <div class="newproduct-card text-center m-2 flex-fill" style="max-width: 18%;">
+                                        <img src="@Url.Content("~/" + item.product.HinhAnh)" alt="@item.product.TenSanPham" />
+                                        <h4 class="newproduct-title mt-2">@item.product.TenSanPham</h4>
+                                        <p class="price text-danger fw-bold">@item.product.Gia.ToString("N0") đ</p>
+                                        <div class="product-hover">
+                                            <div class="hover-icon">
+                                                <a href="javascript:void(0)" class="open-detail" data-id="@item.product.SanPhamID">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </div>
+                                            <div class="hover-buttons">
+                                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.product.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
+                                                <a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.product.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#newProductCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newProductCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-banner">
+    <img src="~/images/aboutbanner.png" alt="Wedding Ring Sale Banner" class="about-banner-img">
+</section>
+
+<!-- Product Detail Modal -->
+<div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productTitle">Chi tiết sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex">
+                <div class="col-md-6">
+                    <img id="productImage" src="" class="img-fluid" alt="Product Image">
+                </div>
+                <div class="col-md-6 ps-3">
+                    <h4 id="productName"></h4>
+                    <p id="productPrice" class="text-danger fs-5 fw-bold"></p>
+                    <p id="productOldPrice" class="text-decoration-line-through text-muted"></p>
+                    <div class="quantity-control d-flex align-items-center mb-3">
+                        <button class="btn btn-outline-secondary" id="decreaseQty">-</button>
+                        <input type="number" id="quantityInput" class="form-control mx-2" value="1" min="1" style="width: 60px;" />
+                        <button class="btn btn-outline-secondary" id="increaseQty">+</button>
+                    </div>
+                    <p id="stockMessage" class="text-warning small"></p>
+                    <button class="btn btn-dark" id="addToCartBtn">Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var stockQty = 0;
+
+            // Click mở modal chi tiết sản phẩm
+            $(".open-detail").click(function () {
+                var productId = $(this).data("id");
+                $.ajax({
+                    url: '@Url.Action("GetProductDetail", "Home")',
+                    type: 'GET',
+                    data: { id: productId },
+                    success: function (response) {
+                        if (response.success) {
+                            var product = response.data;
+                            var imagePath = product.HinhAnh.replace("~", "");
+                            if (!imagePath.startsWith('/')) {
+                                imagePath = '/' + imagePath;
+                            }
+                            $("#productImage").attr("src", imagePath);
+                            $("#productName").text(product.TenSanPham);
+                            $("#productTitle").text(product.TenSanPham);
+                            stockQty = product.SoLuong;
+
+                            // Hiển thị giá giảm nếu có
+                            if (product.GiaGiam != null && product.GiaGiam > 0) {
+                                $("#productPrice").text(product.GiaGiam.toLocaleString('vi-VN') + ' đ');
+                                $("#productOldPrice").text(product.Gia.toLocaleString('vi-VN') + ' đ');
+                            } else {
+                                $("#productPrice").text(product.Gia.toLocaleString('vi-VN') + ' đ');
+                                $("#productOldPrice").text('');
+                            }
+
+                            $("#quantityInput").val(1);
+                            $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
+
+                            // Gán id sản phẩm vào nút Thêm giỏ hàng
+                            $("#addToCartBtn").data("id", product.SanPhamID);
+
+                            $("#productDetailModal").modal('show');
+                        }
+                    }
+                });
+            });
+
+            // Tăng số lượng
+            $("#increaseQty").click(function () {
+                var current = parseInt($("#quantityInput").val());
+                if (current < stockQty) {
+                    $("#quantityInput").val(current + 1);
+                    $("#stockMessage").text('');
+                } else {
+                    $("#stockMessage").text('Vượt quá số lượng sản phẩm trong kho!');
+                }
+            });
+
+            // Giảm số lượng
+            $("#decreaseQty").click(function () {
+                var current = parseInt($("#quantityInput").val());
+                if (current > 1) {
+                    $("#quantityInput").val(current - 1);
+                    $("#stockMessage").text('');
+                }
+            });
+
+            // Thêm giỏ hàng + chuyển sang trang giỏ hàng
+            $("#addToCartBtn").click(function () {
+                var productId = $(this).data("id");
+                var quantity = parseInt($("#quantityInput").val());
+
+                if (productId == null || productId == undefined) {
+                    alert("Lỗi: Không tìm thấy sản phẩm!");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("ThemVaoGio", "GioHang")',
+                    type: 'POST',
+                    data: { id: productId, soLuong: quantity },
+                    success: function (res) {
+                        if (res.success) {
+                            alert("Đã thêm vào giỏ hàng!");
+                            $('#productDetailModal').modal('hide');
+
+                            // Cập nhật số lượng giỏ hàng trên header
+                            if (res.soLuongGioHang > 0) {
+                                $("#cartCount").removeClass("d-none").text(res.soLuongGioHang);
+                            } else {
+                                $("#cartCount").addClass("d-none").text(0);
+                            }
+                            //window.location.href = '@Url.Action("GioHang", "GioHang")';
+                         
+                        } else {
+                            alert(res.message);
+                             if (res.message.includes("đăng nhập")) {
+                            // Nếu báo cần đăng nhập thì chuyển sang Login
+                            window.location.href = '@Url.Action("Login", "Login")';
+        }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Lỗi server: " + xhr.responseText);
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+

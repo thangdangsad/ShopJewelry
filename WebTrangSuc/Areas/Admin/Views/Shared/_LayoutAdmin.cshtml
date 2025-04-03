@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - Trang quản trị</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin-styles.css")" rel="stylesheet" />
+</head>
+<body>
+    <div class="admin-container d-flex">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar bg-dark text-light p-3">
+            <div class="admin-user text-center mb-3">
+                <i class="fas fa-user-circle fa-2x"></i>
+                <p class="mt-2">Xin chào, @Session["TenDangNhap"]</p>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-light @(ViewBag.ActiveMenu == "TrangChu" ? "active bg-secondary" : "")"
+                       href="@Url.Action("HomeAdmin", "HomeAdmin", new { area = "Admin" })">
+                        <i class="fas fa-home"></i> Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light @(ViewBag.ActiveMenu == "QuanLyUser" ? "active bg-secondary" : "")"
+                       href="@Url.Action("QuanLyUser", "QuanLyUser", new { area = "Admin" })">
+                        <i class="fas fa-user"></i> Quản lý Người dùng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#productMenu" role="button">
+                        <span><i class="fas fa-box"></i> Quản lý Sản phẩm</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="collapse @(ViewBag.ActiveMenu == "SanPham" ? "show" : "")" id="productMenu">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link text-light @(ViewBag.SubMenu == "AllProducts" ? "active bg-secondary" : "")"
+                                   href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin" })">Tất cả sản phẩm</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light @(ViewBag.SubMenu == "Price4to5" ? "active bg-secondary" : "")"
+                                   href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin", giaTu = 4000000, giaDen = 5000000 })">Giá 4tr-5tr</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light @(ViewBag.SubMenu == "Price5to6" ? "active bg-secondary" : "")"
+                                   href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin", giaTu = 5000000, giaDen = 6000000 })">Giá 5tr-6tr</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light @(ViewBag.SubMenu == "PriceAbove6" ? "active bg-secondary" : "")"
+                                   href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin", giaTu = 6000000 })">Giá trên 6tr</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light @(ViewBag.ActiveMenu == "HoaDon" ? "active bg-secondary" : "")"
+                       href="@Url.Action("HoaDonAdmin", "HoaDonAdmin", new { area = "Admin" })">
+                        <i class="fas fa-file-invoice"></i> Quản lý Hóa đơn
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light @(ViewBag.ActiveMenu == "BaoCao" ? "active bg-secondary" : "")"
+                       href="@Url.Action("BaoCao", "BaoCao", new { area = "Admin" })">
+                        <i class="fas fa-newspaper"></i> Báo cáo
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#" id="logoutLink">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Nội dung chính -->
+        <div class="admin-content flex-grow-1 p-4 bg-light">
+            <main class="admin-main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".nav-link[data-bs-toggle='collapse']").click(function () {
+                $(".collapse").not($(this).attr("href")).collapse('hide');
+            });
+
+            $("#logoutLink").click(function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Bạn có chắc muốn đăng xuất?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Đăng xuất",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Logout", "Login", new { area = "" })';
+                    }
+                });
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

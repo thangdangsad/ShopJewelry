@@ -1,0 +1,151 @@
+﻿/* Container chính của admin */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar cố định */
+.admin-sidebar {
+    width: 450px;
+    height: 100vh; /* Chiều cao full màn hình */
+    background-color: #333;
+    padding: 20px 0;
+    position: fixed; /* Giữ nguyên khi cuộn */
+    top: 0;
+    left: 0;
+    overflow-y: auto; /* Cho phép cuộn sidebar riêng nếu nội dung dài */
+}
+
+    .admin-sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .admin-sidebar ul li {
+            margin: 10px 0;
+        }
+
+            .admin-sidebar ul li a {
+                display: block;
+                padding: 40px 24px;
+                font-size: 18px;
+                color: #fff;
+                text-align: left;
+                transition: background 0.3s ease;
+                border-radius: 5px;
+            }
+
+                .admin-sidebar ul li a:hover {
+                    background: #555;
+                    color: #ffd700;
+                }
+
+/* Nội dung chính */
+.admin-content {
+    flex-grow: 1;
+    padding: 30px;
+    margin-left: 450px; /* Đẩy nội dung chính ra ngoài */
+    width: calc(100% - 450px); /* Đảm bảo không bị đè lên sidebar */
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+/* Phần user */
+.admin-user i {
+    font-size: 50px;
+    color: white;
+}
+
+.admin-user p {
+    font-size: 18px;
+    margin-top: 10px;
+    color: white;
+}
+
+/* Tiêu đề */
+.heading-title {
+    margin-bottom: 100px;
+}
+
+/* Dashboard Cards */
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 100px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 300px;
+    min-height: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .card:hover {
+        transform: translateY(-5px) scale(1.03);
+    }
+
+.card-body {
+    padding: 25px;
+}
+
+.card i {
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.card-title {
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.card p {
+    font-size: 28px;
+    margin-top: 20px;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .admin-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+/* Định dạng màu cho từng card */
+.card:nth-child(1) {
+    border-top: 4px solid #007bff;
+}
+
+.card:nth-child(2) {
+    border-top: 4px solid #28a745;
+}
+
+.card:nth-child(3) {
+    border-top: 4px solid #ffc107;
+}
+
+.card:nth-child(4) {
+    border-top: 4px solid #dc3545;
+}

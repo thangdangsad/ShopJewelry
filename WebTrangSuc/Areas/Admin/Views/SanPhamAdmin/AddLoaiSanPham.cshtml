@@ -1,0 +1,22 @@
+﻿@model WebTrangSuc.Models.LoaiSanPham
+
+@{
+    ViewBag.Title = "Thêm Loại Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/Content/LoaiSanPham.css" />
+<h2>Thêm Loại Sản Phẩm</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TenLoai)
+        @Html.TextBoxFor(model => model.TenLoai, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.TenLoai)
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a href="@Url.Action("LoaiSanPham")" class="btn btn-secondary">Hủy</a>
+}

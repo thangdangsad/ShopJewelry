@@ -1,0 +1,145 @@
+﻿@model IEnumerable<WebTrangSuc.Models.GioHang>
+
+
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_TaiKhoanLayout.cshtml";
+}
+
+<link href="~/Content/GioHang.css" rel="stylesheet" />
+
+<div class="cart-container">
+    <h2 class="cart-title">Giỏ hàng của bạn</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-cart">
+            <p>Giỏ hàng của bạn đang trống.</p>
+            <a href="@Url.Action("Home", "Home")" class="btn btn-primary">Tiếp tục mua sắm</a>
+        </div>
+    }
+    else
+    {
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Xóa</th>
+                </tr>
+            </thead>
+            <tbody id="cartBody">
+                @foreach (var item in Model)
+                {
+                    <tr id="row-@item.SanPhamID">
+                        <td><img src="@Url.Content(item.SanPham.HinhAnh)" alt="@item.SanPham.TenSanPham" class="cart-img" /></td>
+                        <td>
+                            <div class="cart-product-info">
+                                <strong>@item.SanPham.TenSanPham</strong>
+                                <p>Mã SP: #@item.SanPhamID</p>
+                            </div>
+                        </td>
+                        <td>
+                            @if (item.SanPham.GiaGiam.HasValue)
+                            {
+                                <span class="price-sale">@item.SanPham.GiaGiam.Value.ToString("N0") đ</span><br />
+                                <del class="price-original">@item.SanPham.Gia.ToString("N0") đ</del>
+                            }
+                            else
+                            {
+                                <span class="price-normal">@item.SanPham.Gia.ToString("N0") đ</span>
+                            }
+                        </td>
+                        <td>
+                            <input type="number" value="@item.SoLuong" min="1" class="quantity-input" data-id="@item.SanPhamID" />
+                        </td>
+                        <td class="item-total">
+                            @(((item.SanPham.GiaGiam ?? item.SanPham.Gia) * item.SoLuong).GetValueOrDefault().ToString("N0")) đ
+                        </td>
+
+                        <td>
+                            <button class="btn-delete" data-id="@item.SanPhamID"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="cart-total">
+                Tổng tiền:
+                <strong>
+                    @(Model.Sum(x => (x.SanPham.GiaGiam ?? x.SanPham.Gia) * x.SoLuong).GetValueOrDefault().ToString("N0")) đ
+                </strong>
+
+            </div>
+            <div class="cart-actions">
+                <a href="@Url.Action("Home", "Home")" class="btn btn-secondary">Tiếp tục mua sắm</a>
+                <button class="btn btn-update" id="updateCart">Cập nhật giỏ hàng</button>
+                <a href="@Url.Action("ThanhToan", "ThanhToan")" class="btn btn-primary">Thanh toán</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Cập nhật số lượng
+        $(".quantity-input").change(function () {
+            var id = $(this).data("id");
+            var soLuong = $(this).val();
+
+            $.ajax({
+                url: '@Url.Action("CapNhatSoLuong", "GioHang")',
+                type: 'POST',
+                data: { id: id, soLuong: soLuong },
+                success: function (res) {
+                    if (res.success) {
+                        location.reload();
+                    } else {
+                        alert("Lỗi cập nhật!");
+                    }
+                }
+            });
+        });
+
+        // Xóa sản phẩm
+        $(".btn-delete").click(function () {
+            if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+            var id = $(this).data("id");
+
+            $.ajax({
+                url: '@Url.Action("XoaKhoiGio", "GioHang")',
+                type: 'POST',
+                data: { id: id },
+                success: function (res) {
+                    if (res.success) {
+                        location.reload();
+                    } else {
+                        alert("Lỗi xóa!");
+                    }
+                }
+            });
+        });
+
+        // Cập nhật giỏ hàng
+        $("#updateCart").click(function () {
+            $(".quantity-input").each(function () {
+                var id = $(this).data("id");
+                var soLuong = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("CapNhatSoLuong", "GioHang")',
+                    type: 'POST',
+                    data: { id: id, soLuong: soLuong }
+                });
+            });
+
+            alert("Giỏ hàng đã được cập nhật!");
+            setTimeout(function () { location.reload(); }, 1000);
+        });
+    </script>
+}

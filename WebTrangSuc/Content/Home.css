@@ -1,0 +1,682 @@
+﻿/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fdf6f8;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+}
+
+img, video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Header */
+.header {
+    background-color: transparent;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 50px;
+}
+
+.logo-link {
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+}
+
+.logo-middle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 30px;
+    margin-bottom: 5px;
+    color: #000;
+    font-weight: bold;
+}
+
+.logo-bottom {
+    font-size: 16px;
+    letter-spacing: 6px;
+    color: #000;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+}
+
+
+
+.nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+    .nav ul li a {
+        color: #000;
+        font-weight: 600;
+        font-size: 20px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        transition: color 0.3s;
+    }
+
+        .nav ul li a:hover {
+            color: #ff3399;
+        }
+
+.nav {
+    margin-left: auto;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .dropdown-toggle i {
+        font-size: 25px;
+        color: #000;
+    }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 10px;
+    min-width: 150px;
+    z-index: 999;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+    .dropdown-menu a {
+        display: block;
+        padding: 8px 12px;
+        color: #333;
+    }
+
+/* Banner */
+.banner {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.banner-image {
+    width: auto;
+    max-width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .banner-image {
+        max-height: 300px;
+    }
+}
+
+/* Promo Section */
+.promo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    background-color:#fff;
+}
+
+.promo-container {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.promo-left {
+    flex: 1;
+}
+
+.promo-video {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    border-radius: 12px;
+}
+
+.promo-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.promo-feature {
+    display: flex;
+    align-items: center;
+    background-color: #fff0f5;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+    .promo-feature img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    .promo-feature h4 {
+        margin: 0;
+        color: #e83e8c;
+    }
+
+    .promo-feature p {
+        margin: 5px 0 0;
+        color: #555;
+    }
+
+@media (max-width: 768px) {
+    .promo-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .promo-feature {
+        justify-content: center;
+    }
+
+        .promo-feature img {
+            margin: 0 10px 0 0;
+        }
+}
+/* Product-Ad Section */
+.product-ad-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+    background-color: #fff;
+    gap: 30px;
+}
+
+.product-slider {
+    flex: 2;
+    max-width: 60%;
+}
+
+.advertisement {
+    flex: 1;
+    text-align: center;
+}
+
+    .advertisement img {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+/* Product Card */
+.product-card {
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.discount-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff3399;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.product-title {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.price {
+    margin-top: 8px;
+}
+
+.new-price {
+    color: #ff3399;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.current-price {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Product & Promo Section */
+/* Product & Promo Section */
+.product-promo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: #fff;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+}
+
+.product-slider {
+    flex: 2;
+    max-width: 800px;
+}
+
+.carousel-inner .product-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    width: 30%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        cursor: pointer;
+    }
+    .product-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+.product-title {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.price {
+    margin-top: 5px;
+}
+
+.new-price {
+    color: #ff0000;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+.discount {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.promo-banner {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+    .promo-banner img {
+        width: 450px;
+        height: auto;
+        border-radius: 12px;
+    }
+
+
+
+/* New Product Section */
+/* Section Title tách riêng */
+/* Title Section */
+.product-new-title {
+    padding: 40px 0 20px 0;
+    text-align: center;
+}
+
+.title-box {
+    display: inline-block;
+    background-color: #fdf6f8; /* Màu nền xanh nhạt */
+    padding: 15px 30px;
+    border-radius: 10px; /* Bo góc */
+    position: relative;
+    overflow: hidden;
+}
+
+.section-title {
+    color: #1E5631; /* Màu chữ xanh đậm */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Optional: Nếu muốn có pattern nền như hình */
+.title-box::before {
+    content: '';
+    background: url('/path/to/pattern.png'); /* Thay bằng path pattern nếu cần */
+    opacity: 0.2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 10px;
+}
+
+
+/* New Product Carousel Section */
+.product-new {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: #fff;
+}
+.newcontainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+}
+
+.newproduct-slider {
+    flex: 2;
+    max-width: 1800px;
+}
+
+.carousel-inner.newproduct-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.newproduct-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    width: 30%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+    .newproduct-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+    }
+    .newproduct-title {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+
+}
+/* About Section */
+.about-banner {
+    width: 100%;
+    text-align: center;
+    margin: 80px 0;
+}
+
+.about-banner-img {
+    width: 8000px;
+    height: 590px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+/* Footer */
+.footer .logo-link {
+    display: block;
+    text-align: left; /* Căn trái logo */
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.footer .logo-middle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 24px;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.footer .logo-bottom {
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-top: 0;
+}
+
+/* Căn trái thông tin */
+.footer .contact-info p {
+    margin: 4px 0;
+    font-size: 14px;
+    text-align: left;
+}
+
+
+.footer {
+    background-color: #FFE6D4;
+    color: #333;
+}
+
+    .footer a {
+        color: #333; /* Mặc định link đen */
+        text-decoration: none; /* Không gạch chân */
+    }
+
+        .footer a:hover {
+            color: #b35c3d; /* Đổi màu chữ khi hover, chọn màu phù hợp, ví dụ nâu nhạt */
+            text-decoration: underline;
+        }
+
+.back-to-top {
+    position: fixed; /* Cố định vị trí */
+    bottom: 50px; /* Cách đáy 50px */
+    right: 30px; /* Cách phải 30px */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 999; /* Luôn nằm trên */
+    transition: all 0.3s ease;
+}
+
+    .back-to-top:hover {
+        background-color: #f6d1c1; /* Màu hover */
+        color: #fff;
+    }
+
+    .back-to-top div {
+        display: none; /* Ẩn chữ nhỏ */
+    }
+
+    .back-to-top i {
+        font-size: 18px;
+        color: #333;
+    }
+/* Custom Carousel Arrows */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    opacity: 1;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-image: none;
+    color: #333;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: #f8f9fa;
+    border-color: #ccc;
+}
+
+.carousel-control-prev-icon::before {
+    content: '<';
+    font-weight: bold;
+}
+
+.carousel-control-next-icon::before {
+    content: '>';
+    font-weight: bold;
+}
+.product-card, .newproduct-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-hover,
+.newproduct-card:hover .product-hover {
+    opacity: 1;
+}
+
+/* Icon */
+.hover-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* center it */
+   /* margin-bottom: 100px; /* <-- chỉnh khoảng cách dưới icon */
+}
+
+    .hover-icon a i {
+        color: white;
+        font-size: 24px;
+        transition: transform 0.3s, color 0.3s;
+    }
+
+    .hover-icon a:hover i {
+        transform: scale(1.2);
+        color: #ffc107;
+    }
+
+/* Buttons */
+.hover-buttons {
+    position: absolute;
+    bottom: 20px; /* cách dưới */
+    left: 50%;
+    transform: translateX(-50%); /* center horizontally */
+    display: flex;
+    gap: 8px;
+}
+
+    .hover-buttons a {
+        padding: 12px 30px;
+        background-color: #FFE6D4; /* màu nền button */
+        color: #b35c3d; /* màu chữ */
+        border: none; /* bỏ border nếu muốn */
+        border-radius: 4px;
+    }
+        .hover-buttons a:hover {
+            background-color: #fff; /* Màu hover */
+            color: #b35c3d; /* Màu chữ khi hover */
+        }
+    /* Optional: nếu icon bạn dùng dạng nút tròn */
+    .hover-buttons .open-detail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        background-color: #fff;
+    }

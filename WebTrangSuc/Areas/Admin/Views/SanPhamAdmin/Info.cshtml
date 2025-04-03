@@ -1,0 +1,180 @@
+﻿@model IEnumerable<WebTrangSuc.Models.SanPham>
+
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/SanPhamAdmin.css" />
+
+<h2 class="text-center mb-4">Danh sách sản phẩm</h2>
+
+<p>
+    @Html.ActionLink("Thêm sản phẩm mới", "Add", null, new { @class = "btn btn-primary mb-3" })
+    @Html.ActionLink("Loại sản phẩm", "LoaiSanPham", "SanPhamAdmin", null, new { @class = "btn btn-success mb-3" })
+</p>
+<form method="get" action="@Url.Action("Info", "SanPhamAdmin")" class="form-container">
+    <input type="text" name="tenSanPham" placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.TenSanPham">
+    <input type="number" name="giaTu" placeholder="Giá từ..." value="@ViewBag.GiaTu">
+    <input type="number" name="giaDen" placeholder="Giá đến..." value="@ViewBag.GiaDen">
+    <input type="date" name="ngayThem" value="@ViewBag.NgayThem">
+
+    <select name="loaiSanPham">
+        <option value="">Tất cả loại</option>
+        @foreach (var item in ViewBag.ListLoaiSanPham)
+        {
+            <option value="@item.Value" @(ViewBag.LoaiSanPham != null && ViewBag.LoaiSanPham.ToString() == item.Value ? "selected" : "")>@item.Text</option>
+        }
+    </select>
+
+    <select name="sortOrder">
+        <option value="date_desc">Mới nhất</option>
+        <option value="name_asc">Tên A-Z</option>
+        <option value="name_desc">Tên Z-A</option>
+    </select>
+
+    <button type="submit">Lọc</button>
+</form>
+
+
+<table class="table table-bordered table-striped text-center">
+    <thead class="thead-dark">
+        <tr>
+            <th>STT</th>
+            <th>Tên sản phẩm</th>
+            <th>Loại</th>
+            <th>Giá</th>
+            <th>Giá giảm</th>
+            <th>Giảm giá (%)</th>
+            <th>Hình ảnh</th>
+            <th>Số lượng</th>
+            <th>Ngày thêm</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int stt = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@stt</td>
+                <td>@item.TenSanPham</td>
+                <td>@(item.LoaiSanPham != null ? item.LoaiSanPham.TenLoai : "-")</td>
+                <td>@item.Gia.ToString("N0") đ</td>
+                <td>@(item.GiaGiam.HasValue ? item.GiaGiam.Value.ToString("N0") + " đ" : "-")</td>
+                <td>@(item.GiamGia.HasValue ? item.GiamGia + "%" : "-")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.HinhAnh))
+                    {
+                        <img src="@Url.Content(item.HinhAnh)" width="80" height="80" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>@item.SoLuong</td>
+                <td>
+                    @(item.NgayThem.HasValue ? item.NgayThem.Value.ToString("dd/MM/yyyy") : "-")
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.SanPhamID }, new { @class = "btn btn-sm btn-warning me-1" })
+                    <button class="btn btn-sm btn-danger btn-delete"
+                            data-id="@item.SanPhamID"
+                            data-name="@item.TenSanPham">
+                        Xóa
+                    </button>
+                </td>
+            </tr>
+            stt++;
+        }
+    </tbody>
+</table>
+
+@{
+    int totalPages = (int)Math.Ceiling((double)ViewBag.TotalItems / ViewBag.PageSize);
+    int currentPage = ViewBag.CurrentPage;
+}
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Info", new {
+                        page = i,
+                        tenSanPham = ViewBag.TenSanPham,
+                        giaTu = ViewBag.GiaTu,
+                        giaDen = ViewBag.GiaDen,
+                        ngayThem = ViewBag.NgayThem,
+                        loaiSanPham = ViewBag.LoaiSanPham,
+                        sortOrder = ViewBag.SortOrder
+                    })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@Html.AntiForgeryToken()
+
+
+@if (Model.Count() == 0)
+{
+    <div class="alert alert-info mt-3">
+        Chưa có sản phẩm nào.
+    </div>
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $(".btn-delete").click(function () {
+                var id = $(this).data("id");
+                var name = $(this).data("name");
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Xóa sản phẩm: " + name,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteProduct", "SanPhamAdmin", new { area = "Admin" })',
+                            type: 'POST',
+                            data: {
+                                id: id,
+                                __RequestVerificationToken: token
+                            },
+                            success: function (res) {
+                                if (res.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: res.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire('Lỗi', res.message, 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Lỗi', 'Không thể xóa sản phẩm', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

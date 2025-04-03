@@ -1,0 +1,87 @@
+﻿@model WebTrangSuc.Models.HoaDon
+
+@{
+    ViewBag.Title = "Chi tiết Hóa đơn";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Chi tiết hóa đơn #@Model.HoaDonID</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ct in Model.ChiTietHoaDons)
+        {
+            <tr>
+                <td>@ct.SanPham.TenSanPham</td>
+                <td>@(ct.DonGia.HasValue ? ct.DonGia.Value.ToString("N0") + " VND" : "0 VND")</td>
+                <td>@ct.SoLuong</td>
+                <td>@(ct.ThanhTien.HasValue ? ct.ThanhTien.Value.ToString("N0") + " VND" : "0 VND")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Tổng tiền -->
+<div style="text-align: right; font-size: 24px; font-weight: bold; margin-top: 10px;">
+    Tổng tiền: @(Model.TongTien.HasValue ? Model.TongTien.Value.ToString("N0") + " VND" : "0 VND")
+</div>
+
+<a href="@Url.Action("HoaDonAdmin", "HoaDonAdmin", new { area = "Admin" })" class="btn btn-secondary">Quay lại</a>
+
+<form method="post" action="@Url.Action("CapNhatHoaDon", "HoaDonAdmin")" style="margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="HoaDonID" value="@Model.HoaDonID" />
+    <input type="hidden" name="TrangThai" value="Đã xác nhận" />
+
+    <h4 class="text-center">Thông tin khách hàng</h4>
+
+    <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Người nhận:</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" value="@Model.DiaChiNhanHang.HoTen" readonly />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Số điện thoại:</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" value="@Model.DiaChiNhanHang.SoDienThoai" readonly />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Email:</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" value="@Model.NguoiDung.Email" readonly />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Địa chỉ giao hàng:</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" value="@Model.DiaChiNhanHang.DiaChi" readonly />
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.DiaChiNhanHang.GhiChu))
+    {
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Ghi chú:</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" readonly>@Model.DiaChiNhanHang.GhiChu</textarea>
+            </div>
+        </div>
+    }
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-success" style="margin-top: 20px; font-size: 18px; padding: 10px 20px;">Xác nhận</button>
+    </div>
+</form>

@@ -1,0 +1,80 @@
+﻿/* Giới hạn CSS chỉ áp dụng cho phần Quản lý Người Dùng */
+.quan-ly-nguoi-dung h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Style cho form tìm kiếm và lọc */
+.quan-ly-nguoi-dung form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.quan-ly-nguoi-dung input[type="text"],
+.quan-ly-nguoi-dung select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.quan-ly-nguoi-dung button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .quan-ly-nguoi-dung button:hover {
+        background-color: #0056b3;
+    }
+
+/* Style cho bảng */
+.quan-ly-nguoi-dung table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.quan-ly-nguoi-dung th,
+.quan-ly-nguoi-dung td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.quan-ly-nguoi-dung th {
+    background-color: #007bff;
+    color: white;
+}
+
+.quan-ly-nguoi-dung tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Style cho cột hành động */
+.quan-ly-nguoi-dung td a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+    .quan-ly-nguoi-dung td a:hover {
+        text-decoration: underline;
+    }
+
+/* Link thêm người dùng */
+.quan-ly-nguoi-dung p a {
+    color: #28a745;
+    font-weight: bold;
+}
+
+    .quan-ly-nguoi-dung p a:hover {
+        text-decoration: underline;
+    }

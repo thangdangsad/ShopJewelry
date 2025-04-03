@@ -1,0 +1,64 @@
+﻿@model List<WebTrangSuc.Models.HoaDon>
+
+@{
+    ViewBag.Title = "Quản lý Hóa đơn";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Quản lý Hóa đơn</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Khách Hàng</th>
+            <th>Ngày Đặt</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng Thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="clickable-row" data-id="@item.HoaDonID">
+                <td>@item.HoaDonID</td>
+                <td>@(item.NguoiDung?.HoTen ?? "Khách vãng lai")</td>
+                <td>@(item.NgayDat.HasValue ? item.NgayDat.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</td>
+                <td>@(item.TongTien.HasValue ? item.TongTien.Value.ToString("N0") + " đ" : "0 đ")</td>
+                <td>@item.TrangThai</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button id="editBtn" class="btn btn-warning">Sửa HĐ</button>
+<button id="deleteBtn" class="btn btn-danger">Xóa HĐ</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let selectedId = null;
+
+        $(".clickable-row").click(function () {
+            $(".clickable-row").removeClass("table-active");
+            $(this).addClass("table-active");
+            selectedId = $(this).data("id");
+        });
+
+        $("#editBtn").click(function () {
+            if (selectedId) {
+                window.location.href = "/Admin/HoaDonAdmin/SuaHoaDon/" + selectedId;
+            } else {
+                alert("Vui lòng chọn hóa đơn trước!");
+            }
+        });
+
+        $("#deleteBtn").click(function () {
+            if (selectedId && confirm("Bạn có chắc chắn muốn xóa hóa đơn này?")) {
+                $.post("/Admin/HoaDonAdmin/XoaHoaDon", { id: selectedId })
+                    .done(() => { alert("Xóa thành công!"); location.reload(); })
+                    .fail(() => { alert("Xóa không thành công!"); });
+            }
+        });
+    });
+</script>

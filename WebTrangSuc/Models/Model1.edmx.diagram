@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="82bef299063b485c9f63de61fd224b6f" Name="Diagram1">
+        <EntityTypeShape EntityType="LiLyShopModel.ChiTietHoaDon" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.DiaChiNhanHang" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.GioHang" Width="1.5" PointX="8.25" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.HoaDon" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.LoaiSanPham" Width="1.5" PointX="0.75" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.NguoiDung" Width="1.5" PointX="1.5" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.SanPham" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LiLyShopModel.TinTuc" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <AssociationConnector Association="LiLyShopModel.FK__ChiTietHo__HoaDo__1F98B2C1" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__ChiTietHo__SanPh__208CD6FA" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__DiaChiNha__Nguoi__114A936A" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__HoaDon__DiaChiID__19DFD96B" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__GioHang__NguoiDu__25518C17" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__GioHang__SanPham__2645B050" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__HoaDon__NguoiDun__18EBB532" ManuallyRouted="false" />
+        <AssociationConnector Association="LiLyShopModel.FK__SanPham__IDLoaiS__09A971A2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,134 @@
+﻿@model IEnumerable<WebTrangSuc.Models.NguoiDung>
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .quan-ly-nguoi-dung h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .quan-ly-nguoi-dung form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .quan-ly-nguoi-dung input[type="text"],
+    .quan-ly-nguoi-dung select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .quan-ly-nguoi-dung button {
+        padding: 8px 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .quan-ly-nguoi-dung button:hover {
+            background-color: #0056b3;
+        }
+
+    .quan-ly-nguoi-dung table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .quan-ly-nguoi-dung th,
+    .quan-ly-nguoi-dung td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .quan-ly-nguoi-dung th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .quan-ly-nguoi-dung tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .quan-ly-nguoi-dung td a {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 8px;
+    }
+
+        .quan-ly-nguoi-dung td a:hover {
+            text-decoration: underline;
+        }
+
+    .quan-ly-nguoi-dung p a {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+        .quan-ly-nguoi-dung p a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="quan-ly-nguoi-dung">
+    <h2>Quản lý Người Dùng</h2>
+    <form method="get">
+        <input type="text" name="search" placeholder="Tìm kiếm..." value="@Request.QueryString["search"]">
+        <select name="role">
+            <option value="">-- Chọn vai trò --</option>
+            <option value="Admin" @(Request.QueryString["role"] == "Admin" ? "selected" : "")>Admin</option>
+            <option value="User" @(Request.QueryString["role"] == "User" ? "selected" : "")>User</option>
+        </select>
+        <button type="submit">Lọc</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên đăng nhập</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Vai trò</th>
+                <th>Ngày đăng ký</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.NguoiDungID</td>
+                    <td>@user.TenDangNhap</td>
+                    <td>@user.HoTen</td>
+                    <td>@user.Email</td>
+                    <td>@user.SoDienThoai</td>
+                    <td>@user.DiaChi</td>
+                    <td>@user.VaiTro</td>
+                    <td>@(user.NgayDki.HasValue ? user.NgayDki.Value.ToString("dd/MM/yyyy") : "-")</td>
+
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = user.NguoiDungID }) |
+                        @Html.ActionLink("Xóa", "Delete", new { id = user.NguoiDungID }, new { onclick = "return confirm('Bạn có chắc chắn muốn xóa?');" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>@Html.ActionLink("Thêm người dùng mới", "Create")</p>
+</div>

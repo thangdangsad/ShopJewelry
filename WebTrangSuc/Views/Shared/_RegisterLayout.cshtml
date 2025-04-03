@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - MyBeauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fde4ec;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .register-wrapper {
+            display: flex;
+            width: 900px; /* Giảm chiều rộng */
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            flex: 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Giảm padding */
+            border-right: 1px solid #ddd;
+        }
+
+            .logo-section img {
+                max-width: 200px; /* Giới hạn chiều rộng */
+                max-height: 200px; /* Giới hạn chiều cao */
+                width: auto;
+                height: auto;
+            }
+
+        /* Form Section */
+        .form-section {
+            flex: 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            width: 100%;
+            padding: 25px; /* Giảm padding */
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #d81b60;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 20px; /* Giảm margin */
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px; /* Giảm margin */
+        }
+
+            .input-group i.fa-lock,
+            .input-group i.fa-user,
+            .input-group i.fa-envelope,
+            .input-group i.fa-user-circle,
+            .input-group i.fa-phone,
+            .input-group i.fa-map-marker-alt {
+                position: absolute;
+                left: 12px;
+                top: 12px;
+                color: #777;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 10px 35px; /* Giảm padding */
+                border: 1px solid #ccc;
+                border-radius: 25px;
+                outline: none;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 10px;
+            background-color: #d81b60;
+            border: none;
+            color: white;
+            border-radius: 25px;
+            margin: 15px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .signin {
+            text-align: center;
+            font-size: 13px;
+        }
+
+            .signin a {
+                color: #d81b60;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+        .or-divider {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+            color: #555;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+            .or-divider span {
+                background: #fff;
+                padding: 0 8px;
+                position: relative;
+                z-index: 1;
+            }
+
+            .or-divider::before,
+            .or-divider::after {
+                content: "";
+                width: 40%;
+                height: 1px;
+                background-color: #ccc;
+                position: absolute;
+                top: 50%;
+            }
+
+            .or-divider::before {
+                left: 0;
+            }
+
+            .or-divider::after {
+                right: 0;
+            }
+
+        .social-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 25px;
+            border: none;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .facebook {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .google {
+            background-color: #db4437;
+            color: white;
+        }
+
+        .social-btn i {
+            margin-right: 8px;
+        }
+
+        .alert {
+            text-align: center;
+            margin-bottom: 10px;
+            color: red;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    @RenderBody()
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

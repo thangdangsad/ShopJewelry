@@ -1,0 +1,96 @@
+﻿@model List<WebTrangSuc.Models.GioHang>
+@{
+    ViewBag.Title = "Thanh toán";
+    var nguoiDung = ViewBag.NguoiDung as WebTrangSuc.Models.NguoiDung;
+    var diaChiList = ViewBag.DiaChiList as List<WebTrangSuc.Models.DiaChiNhanHang>;
+    Layout = "~/Views/Shared/_TaiKhoanLayout.cshtml";
+}
+<link href="~/Content/ThanhToan.css" rel="stylesheet" />
+
+<h2>Thanh toán</h2>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+
+@using (Html.BeginForm("XacNhanThanhToan", "ThanhToan", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+
+        <!-- Panel Bên trái: Thông tin nhận hàng -->
+        <div style="flex: 1; border: 1px solid #ccc; padding: 15px; min-width: 300px;">
+            <h4>Thông tin nhận hàng</h4>
+
+            <div>
+                <label>Họ tên</label>
+                <input type="text" name="HoTen" value="@nguoiDung.HoTen" required />
+            </div>
+            <div>
+                <label>Số điện thoại</label>
+                <input type="text" name="SoDienThoai" value="@nguoiDung.SoDienThoai" required />
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="email" value="@nguoiDung.Email" readonly />
+            </div>
+            <div>
+                <label>Chọn địa chỉ đã lưu</label>
+                <select name="DiaChiDropdown">
+                    <option value="">-- Chọn --</option>
+                    <option value="0">@nguoiDung.DiaChi (Mặc định)</option>
+                    @foreach (var d in diaChiList)
+                    {
+                        <option value="@d.DiaChiID">@d.DiaChi</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label>Hoặc nhập địa chỉ mới</label>
+                <input type="text" name="DiaChi" placeholder="Nhập địa chỉ mới nếu muốn" />
+            </div>
+            <div>
+                <label>Ghi chú</label>
+                <input type="text" name="GhiChu" />
+            </div>
+        </div>
+
+        <!-- Panel Giữa: Thanh toán -->
+        <div style="flex: 0.5; border: 1px solid #ccc; padding: 15px; min-width: 200px;">
+            <h4>Phương thức thanh toán</h4>
+            <div style="margin-top: 10px;">
+                <input type="radio" checked /> Thanh toán khi nhận hàng (COD)
+            </div>
+        </div>
+
+        <!-- Panel Bên phải: Đơn hàng -->
+        <div class="thanhtoan-panel">
+            <h4>Đơn hàng của bạn</h4>
+            <ul class="donhang-list">
+                @foreach (var item in Model)
+                {
+                    <li class="donhang-item">
+                        <img src="@item.SanPham.HinhAnh" alt="Hình" />
+                        <div class="donhang-item-info">
+                            @item.SanPham.TenSanPham - SL: @item.SoLuong <br />
+                            Giá: @String.Format("{0:N0}", item.SanPham.GiaGiam ?? item.SanPham.Gia) đ
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div class="tongtien">
+                Tổng tiền: @String.Format("{0:N0}", Model.Sum(x => (x.SoLuong ?? 1) * (x.SanPham.GiaGiam ?? x.SanPham.Gia))) đ
+            </div>
+
+            <div class="thanhtoan-buttons">
+                <a href="@Url.Action("GioHang", "GioHang")" class="btn-secondary">Quay về giỏ hàng</a>
+                <button type="submit" class="btn-primary">Đặt hàng</button>
+            </div>
+        </div>
+
+    </div>
+}

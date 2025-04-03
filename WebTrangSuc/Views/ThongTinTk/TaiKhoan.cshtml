@@ -1,0 +1,42 @@
+﻿@model WebTrangSuc.Models.NguoiDung
+@{
+    ViewBag.Title = "Trang Tài Khoản";
+    Layout = "~/Views/Shared/_TaiKhoanLayout.cshtml";
+}
+@section styles {
+    <link rel="stylesheet" href="~/Content/TaiKhoan.css" />
+}
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-wrapper">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="@Url.Action("Home", "Home")">Trang chủ</a> &raquo; Trang khách hàng
+        </div>
+    </div>
+</div>
+
+<!-- Account Content -->
+<div class="account-page container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar">
+            <h3>TRANG TÀI KHOẢN</h3>
+            <p class="welcome">Xin chào, <span class="highlight">@Model.HoTen</span>!</p>
+            <ul class="menu">
+                <li class="active"><a href="#">Thông tin tài khoản</a></li>
+                <li><a href="#">Đơn hàng của bạn</a></li>
+                <li><a href="#">Đổi mật khẩu</a></li>
+                <li><a href="#">Sổ địa chỉ (0)</a></li>
+            </ul>
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-9 info">
+            <h3>THÔNG TIN TÀI KHOẢN</h3>
+            <p><strong>Họ tên:</strong> @Model.HoTen</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Điện thoại:</strong> @Model.SoDienThoai</p>
+        </div>
+    </div>
+</div>

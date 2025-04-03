@@ -1,0 +1,36 @@
+﻿@model List<WebTrangSuc.Models.LoaiSanPham>
+
+@{
+    ViewBag.Title = "Quản lý loại sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/Content/LoaiSanPham.css" />
+<h2>Danh sách loại sản phẩm</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Loại</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loai in Model)
+        {
+            <tr>
+                <td>@loai.IDLoaiSp</td>
+                <td>@loai.TenLoai</td>
+                <td>
+                    <a href="@Url.Action("EditLoaiSanPham", "SanPhamAdmin", new { id = loai.IDLoaiSp })" class="btn btn-warning">Sửa</a>
+                    <a href="@Url.Action("DeleteLoaiSanPham", "SanPhamAdmin", new { id = loai.IDLoaiSp })" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between">
+    <a href="@Url.Action("AddLoaiSanPham", "SanPhamAdmin")" class="btn btn-primary">Thêm loại sản phẩm mới</a>
+    <a href="@Url.Action("Info", "SanPhamAdmin")" class="btn btn-secondary">Quay lại trang sản phẩm</a>
+</div>

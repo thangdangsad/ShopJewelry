@@ -1,0 +1,83 @@
+﻿/* Breadcrumb */
+.breadcrumb-wrapper {
+    width: 100%;
+    background-color: #ffe7db;
+    padding: 20px 0;
+    border-bottom: 1px solid #f2c7b5;
+}
+
+    .breadcrumb-wrapper .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+.breadcrumb {
+    font-size: 16px;
+    color: #b45f46;
+}
+
+    .breadcrumb a {
+        color: #b45f46;
+        text-decoration: none;
+    }
+
+/* Account Page */
+.account-page {
+    padding: 50px 0;
+}
+
+.sidebar {
+    border-right: 1px solid #eee;
+    padding-right: 20px;
+}
+
+    .sidebar h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .sidebar .welcome {
+        margin-bottom: 20px;
+    }
+
+    .sidebar .highlight {
+        color: red;
+        font-weight: bold;
+    }
+
+    .sidebar .menu {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar .menu li {
+            margin: 10px 0;
+        }
+
+            .sidebar .menu li a {
+                color: #000;
+                text-decoration: none;
+            }
+
+            .sidebar .menu li.active a {
+                color: red;
+                font-weight: bold;
+            }
+
+/* Info Content */
+.info h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.info p {
+    margin: 10px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        border-right: none;
+        margin-bottom: 30px;
+    }
+}

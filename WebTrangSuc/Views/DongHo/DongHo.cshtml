@@ -1,0 +1,279 @@
+﻿@model IEnumerable<WebTrangSuc.Models.SanPham>
+
+@{
+    ViewBag.Title = "Đồng hồ";
+    Layout = "~/Views/Shared/_TaiKhoanLayout.cshtml";
+}
+
+@section Styles {
+    <link href="~/Content/TrangSucCuoi.css" rel="stylesheet" />
+}
+
+<div class="container mt-4">
+
+    <!-- Breadcrumb + Tiêu đề + Bộ lọc gộp chung -->
+    <div class="d-flex justify-content-between align-items-center p-3 mb-3" style="background-color: #f8f8f8;">
+        <!-- Breadcrumb -->
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Home", "Home")" class="nav-link p-0" style="color: #333;">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color: #555;">Trang Sức Cưới</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Sắp xếp + Tìm kiếm -->
+        <div class="d-flex align-items-center">
+            <!-- Sắp xếp -->
+            <!-- Sắp xếp -->
+            <label for="sortOrder" class="mb-0 mr-2" style="color: #333;">Sắp xếp theo</label>
+            <select id="sortOrder" class="form-control w-auto" onchange="updateSort()">
+                <option value="@Url.Action("DongHo", new { sortOrder = "", searchString = ViewBag.SearchString, page = 1 })">Mặc định</option>
+                <option value="@Url.Action("DongHo", new { sortOrder = "gia_tang", searchString = ViewBag.SearchString, page = 1 })"
+                        @(ViewBag.CurrentSort == "gia_tang" ? "selected" : "")>
+                    Giá tăng dần
+                </option>
+                <option value="@Url.Action("DongHo", new { sortOrder = "gia_giam", searchString = ViewBag.SearchString, page = 1 })"
+                        @(ViewBag.CurrentSort == "gia_giam" ? "selected" : "")>
+                    Giá giảm dần
+                </option>
+                <option value="@Url.Action("DongHo", new { sortOrder = "ten_az", searchString = ViewBag.SearchString, page = 1 })"
+                        @(ViewBag.CurrentSort == "ten_az" ? "selected" : "")>
+                    Tên A-Z
+                </option>
+                <option value="@Url.Action("DongHo", new { sortOrder = "ten_za", searchString = ViewBag.SearchString, page = 1 })"
+                        @(ViewBag.CurrentSort == "ten_za" ? "selected" : "")>
+                    Tên Z-A
+                </option>
+            </select>
+
+            <script>
+                function updateSort() {
+                    var sortUrl = document.getElementById("sortOrder").value;
+                    window.location.href = sortUrl;
+                }
+            </script>
+
+
+            <!-- Ô tìm kiếm -->
+            <form id="searchForm" class="d-flex ms-3" action="@Url.Action("DongHo")" method="get">
+                <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                <input type="hidden" name="page" value="1" />
+                <input type="text" name="searchString" id="searchBox" class="form-control"
+                       placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.SearchString"
+                       style="width: 200px;" />
+                <button type="submit" class="btn btn-dark ms-2">Tìm</button>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <!-- Danh sách sản phẩm Trang Sức Cưới -->
+    <div class="row justify-content-center">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-md-3 col-sm-6 d-flex">
+                    <div class="newproduct-card text-center flex-fill">
+                        <img src="@Url.Content("~/" + item.HinhAnh)" alt="@item.TenSanPham" />
+                        <h4 class="newproduct-title mt-2">@item.TenSanPham</h4>
+                        <p class="price text-danger fw-bold">
+                            @if (item.GiaGiam != null && item.GiaGiam > 0)
+                            {
+                                <span class="old-price">@item.Gia.ToString("N0")</span>
+                                <span>@($"{item.GiaGiam?.ToString("N0")} đ")</span>
+
+                            }
+                            else
+                            {
+                                @(item.Gia.ToString("N0") + " đ")
+                            }
+
+                        </p>
+                        <div class="product-hover">
+                            <div class="hover-icon-wrapper">
+                                <div class="hover-icon">
+                                    <a href="javascript:void(0)" class="open-detail" data-id="@item.SanPhamID">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="hover-buttons mt-2">
+                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
+                                <a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p class="text-center">Không có sản phẩm nào.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Phân trang -->
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("DongHo", new { sortOrder = ViewBag.CurrentSort, page = i })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <!-- Product Detail Modal -->
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productTitle">Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-6">
+                        <img id="productImage" src="" class="img-fluid w-100" alt="Product Image">
+                    </div>
+                    <div class="col-md-6">
+                        <h4 id="productName" class="mb-3 fw-bold"></h4>
+                        <p id="productPrice" class="text-danger fs-5 fw-bold mb-2"></p>
+                        <p id="productOldPrice" class="text-decoration-line-through text-muted mb-3"></p>
+                        <div class="quantity-control d-flex align-items-center mb-3">
+                            <button class="btn btn-outline-secondary" id="decreaseQty">-</button>
+                            <input type="number" id="quantityInput" class="form-control mx-2 text-center" value="1" min="1" style="width: 60px;" readonly />
+                            <button class="btn btn-outline-secondary" id="increaseQty">+</button>
+                        </div>
+                        <p id="stockMessage" class="text-warning small mb-3"></p>
+                        <button class="btn btn-dark w-100" id="addToCartBtn">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @section scripts {
+        <script>
+        $(document).ready(function () {
+            var stockQty = 0;
+
+            // Click mở modal chi tiết sản phẩm
+            $(".open-detail").click(function () {
+                var productId = $(this).data("id");
+                $.ajax({
+                    url: '@Url.Action("GetProductDetail", "Home")',
+                    type: 'GET',
+                    data: { id: productId },
+                    success: function (response) {
+                        if (response.success) {
+                            var product = response.data;
+                            var imagePath = product.HinhAnh.replace("~", "");
+                            if (!imagePath.startsWith('/')) {
+                                imagePath = '/' + imagePath;
+                            }
+                            $("#productImage").attr("src", imagePath);
+                            $("#productName").text(product.TenSanPham);
+                            $("#productTitle").text(product.TenSanPham);
+                            stockQty = product.SoLuong;
+
+                            // Hiển thị giá giảm nếu có
+                            if (product.GiaGiam != null && product.GiaGiam > 0) {
+                                $("#productPrice").html(product.GiaGiam.toLocaleString('vi-VN') + ' ₫');
+                                $("#productOldPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
+                            } else {
+                                $("#productPrice").html(product.Gia.toLocaleString('vi-VN') + ' ₫');
+                                $("#productOldPrice").text('');
+                            }
+
+                            $("#quantityInput").val(1);
+                            $("#stockMessage").text('Còn ' + product.SoLuong + ' sản phẩm trong kho');
+
+                            // Gán id sản phẩm vào nút Thêm giỏ hàng
+                            $("#addToCartBtn").data("id", product.SanPhamID);
+
+                            $("#productDetailModal").modal('show');
+                        } else {
+                            alert("Không tìm thấy sản phẩm!");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Lỗi server: " + xhr.responseText);
+                    }
+                });
+            });
+
+            // Tăng số lượng
+            $("#increaseQty").click(function () {
+                var current = parseInt($("#quantityInput").val());
+                if (current < stockQty) {
+                    $("#quantityInput").val(current + 1);
+                    $("#stockMessage").text('');
+                } else {
+                    $("#stockMessage").text('Vượt quá số lượng sản phẩm trong kho!');
+                }
+            });
+
+            // Giảm số lượng
+            $("#decreaseQty").click(function () {
+                var current = parseInt($("#quantityInput").val());
+                if (current > 1) {
+                    $("#quantityInput").val(current - 1);
+                    $("#stockMessage").text('');
+                }
+            });
+
+            // Thêm giỏ hàng + chuyển sang trang giỏ hàng
+            $("#addToCartBtn").click(function () {
+                var productId = $(this).data("id");
+                var quantity = parseInt($("#quantityInput").val());
+
+                if (!productId) {
+                    alert("Lỗi: Không tìm thấy sản phẩm!");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("ThemVaoGio", "GioHang")',
+                    type: 'POST',
+                    data: { id: productId, soLuong: quantity },
+                    success: function (res) {
+                        if (res.success) {
+                            alert("Đã thêm vào giỏ hàng!");
+                            $('#productDetailModal').modal('hide');
+
+                            // Cập nhật số lượng giỏ hàng trên header
+                            if (res.soLuongGioHang > 0) {
+                                $("#cartCount").removeClass("d-none").text(res.soLuongGioHang);
+                            } else {
+                                $("#cartCount").addClass("d-none").text(0);
+                            }
+                            window.location.href = '@Url.Action("GioHang", "GioHang")';
+
+                        } else {
+                            alert(res.message);
+                            if (res.message.includes("đăng nhập")) {
+                                // Nếu báo cần đăng nhập thì chuyển sang Login
+                                window.location.href = '@Url.Action("Login", "Login")';
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Lỗi server: " + xhr.responseText);
+                    }
+
+                });
+            });
+        });
+        </script>
+    }

@@ -1,0 +1,118 @@
+﻿/* Reset nhẹ */
+input, select, textarea, button {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+label {
+    font-weight: bold;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h4 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Panel bố cục */
+.thanhtoan-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.thanhtoan-panel {
+    border: 1px solid #ccc;
+    padding: 20px;
+    flex: 1;
+    min-width: 300px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.thanhtoan-panel-small {
+    flex: 0.5;
+    min-width: 200px;
+}
+
+/* Đơn hàng */
+.donhang-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.donhang-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .donhang-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 10px;
+        border-radius: 6px;
+    }
+
+.donhang-item-info {
+    flex: 1;
+}
+
+/* Tổng tiền */
+.tongtien {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Nút điều hướng */
+.thanhtoan-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.btn-primary {
+    background-color: #d19c97;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: #b3756f;
+    }
+
+.btn-secondary {
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #bbb;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .thanhtoan-container {
+        flex-direction: column;
+    }
+}

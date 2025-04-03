@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Báo Cáo Thống Kê";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/Content/BaoCao.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h2 class="text-center">Báo Cáo Thống Kê</h2>
+
+<div class="form-group">
+    <label for="reportType">Chọn loại báo cáo:</label>
+    <select id="reportType" class="form-control">
+        <option value="revenue">Doanh thu</option>
+        <option value="best-seller">Sản phẩm bán chạy</option>
+        <option value="low-seller">Sản phẩm ít người mua</option>
+        <option value="low-stock">Sản phẩm sắp hết hàng</option>
+        <option value="orders">Báo cáo đơn hàng</option>
+        <option value="order-status">Tình trạng đơn hàng</option>
+        <option value="users">Người dùng đăng ký mới</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="timeFilter">Chọn thời gian:</label>
+    <select id="timeFilter" class="form-control">
+        <option value="week">Tuần</option>
+        <option value="month">Tháng</option>
+        <option value="year">Năm</option>
+    </select>
+</div>
+
+<div id="reportTable"></div>
+<canvas id="reportChart"></canvas>
+
+<script>
+$(document).ready(function () {
+    let chartInstance = null;
+
+    function loadReport(type, time) {
+        let url = "";
+        if (type === "revenue") url = "@Url.Action("GetDoanhThu", "BaoCao")?type=" + time;
+        if (type === "best-seller") url = "@Url.Action("GetSanPhamBanChay", "BaoCao")";
+        if (type === "low-seller") url = "@Url.Action("GetSanPhamItMua", "BaoCao")";
+        if (type === "low-stock") url = "@Url.Action("GetSanPhamSapHetHang", "BaoCao")";
+        if (type === "orders") url = "@Url.Action("GetBaoCaoDonHang", "BaoCao")?type=" + time;
+        if (type === "order-status") url = "@Url.Action("GetTinhTrangDonHang", "BaoCao")?type=" + time;
+        if (type === "users") url = "@Url.Action("GetBaoCaoNguoiDungMoi", "BaoCao")?type=" + time;
+
+        $.getJSON(url, function (data) {
+            let labels = [], values = [];
+            let tableHtml = "<table class='table'><thead><tr>";
+
+            if (type === "revenue" || type === "orders" || type === "users") {
+                tableHtml += "<th>Thời gian</th><th>Số lượng</th></tr></thead><tbody>";
+                data.forEach(item => {
+                    let label = item.Date || "Không xác định";
+                    let value = item.Revenue || item.OrderCount || item.UserCount || 0;
+                    labels.push(label);
+                    values.push(value);
+                    tableHtml += `<tr><td>${label}</td><td>${value}</td></tr>`;
+                });
+            } else if (type === "order-status") {
+                tableHtml += "<th>Trạng thái</th><th>Số lượng</th></tr></thead><tbody>";
+                data.forEach(item => {
+                    labels.push(item.Status);
+                    values.push(item.Count);
+                    tableHtml += `<tr><td>${item.Status}</td><td>${item.Count}</td></tr>`;
+                });
+            } else {
+                tableHtml += "<th>Tên</th><th>Số lượng</th></tr></thead><tbody>";
+                data.forEach(item => {
+                    let label = item.TenSanPham || "Không xác định";
+                    let value = item.SoLuongBan || item.SoLuong || 0;
+                    labels.push(label);
+                    values.push(value);
+                    tableHtml += `<tr><td>${label}</td><td>${value}</td></tr>`;
+                });
+            }
+
+            tableHtml += "</tbody></table>";
+            $("#reportTable").html(tableHtml);
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            let ctx = document.getElementById("reportChart").getContext("2d");
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: type === "revenue" ? "Doanh thu" : "Số lượng",
+                        data: values,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    }]
+                }
+            });
+        }).fail(function () {
+            alert("Không thể tải dữ liệu. Vui lòng kiểm tra API.");
+        });
+    }
+
+    $("#reportType, #timeFilter").change(function () {
+        loadReport($("#reportType").val(), $("#timeFilter").val());
+    });
+
+    loadReport("revenue", "month");
+});
+</script>

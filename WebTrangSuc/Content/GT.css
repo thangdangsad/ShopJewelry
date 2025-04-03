@@ -1,0 +1,168 @@
+﻿/* 🎨 Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 🎀 Màu sắc chủ đạo */
+:root {
+    --gold: #D4AF37;
+    --white: #FFFFFF;
+    --dark: #333;
+    --light-gray: #F8F8F8;
+}
+
+/* ✨ Body */
+body {
+    background-color: var(--light-gray);
+    color: var(--dark);
+}
+
+/* 📌 Banner */
+.banner {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: url('../images/banner-jewelry.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+}
+
+    .banner h1 {
+        font-size: 42px;
+        font-weight: bold;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+/* 📌 Giới thiệu */
+.about {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: var(--white);
+}
+
+.about-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.about-text {
+    flex: 1;
+    min-width: 300px;
+    text-align: left;
+}
+
+    .about-text h2 {
+        color: var(--gold);
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .about-text p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #555;
+    }
+
+.about-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+    .about-image img {
+        max-width: 100%;
+        border-radius: 10px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .about-image img:hover {
+            transform: scale(1.05);
+        }
+
+/* 📌 Thành tựu */
+.achievements {
+    text-align: center;
+    padding: 60px 0;
+    background-color: var(--light-gray);
+}
+
+    .achievements h2 {
+        font-size: 30px;
+        color: var(--gold);
+        margin-bottom: 30px;
+    }
+
+.achievements-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.achievement-item {
+    width: 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+    .achievement-item:hover {
+        transform: translateY(-10px);
+    }
+
+/* 📌 Bộ sưu tập */
+.featured-products {
+    text-align: center;
+    padding: 80px 0;
+}
+
+    .featured-products h2 {
+        font-size: 30px;
+        color: var(--gold);
+        margin-bottom: 30px;
+    }
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.product-card {
+    width: 300px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+    .product-card:hover {
+        transform: scale(1.05);
+    }
+
+    .product-card img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+/* 📌 Footer */
+footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}

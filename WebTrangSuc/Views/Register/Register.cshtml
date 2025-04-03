@@ -1,0 +1,96 @@
+﻿@{
+    Layout = "~/Views/Shared/_RegisterLayout.cshtml";
+    ViewBag.Title = "Register";
+}
+
+<div class="register-wrapper">
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <img src="~/images/logoshop.jpg" alt="Logo" />
+    </div>
+
+    <!-- Register Form Section -->
+    <div class="form-section">
+        <div class="register-container">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <h2>Sign Up</h2>
+            <p class="subtitle">Create your account to continue</p>
+
+            @using (Html.BeginForm("Register", "Register", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="TenDangNhap" placeholder="Username" value="@Request["TenDangNhap"]" required />
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="Email" placeholder="Email" value="@Request["Email"]" required />
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="MatKhau" placeholder="Password" required />
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user-circle"></i>
+                    <input type="text" name="HoTen" placeholder="Full Name" value="@Request["HoTen"]" />
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" name="SoDienThoai" maxlength="10" pattern="^(03|05|07|08|09)\d{8}$" required title="Số điện thoại gồm 10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09" />
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" name="DiaChi" placeholder="Address" value="@Request["DiaChi"]" />
+                </div>
+
+                <input type="submit" class="btn-register" value="Sign Up" />
+            }
+
+            <div class="or-divider">
+                <span>OR</span>
+            </div>
+
+            <button type="button" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i> Connect with Facebook
+            </button>
+
+            <button type="button" class="social-btn google">
+                <i class="fab fa-google"></i> Connect with Google
+            </button>
+
+            <div class="signin">
+                Already have an account? <a href="@Url.Action("Login", "Login")">Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            var pwd = document.getElementById("password");
+            var icon = document.querySelector(".toggle-password");
+            if (pwd.type === "password") {
+                pwd.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                pwd.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
+}

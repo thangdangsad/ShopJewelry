@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Trang chủ Admin";
+}
+
+<div class="admin-dashboard">
+    <h2 class="text-center heading-title">Trang quản trị</h2>
+
+    <div class="dashboard-cards d-flex flex-wrap justify-content-center">
+        <a href="@Url.Action("QuanLyUser", "QuanLyUser", new { area = "Admin" })" class="card text-center shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-user fa-2x text-primary"></i>
+                <h5 class="card-title mt-2">Người dùng</h5>
+                <p class="fs-4 fw-bold">@ViewBag.TotalUsers</p>
+            </div>
+        </a>
+
+        <a href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin" })" class="card text-center shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-box fa-2x text-success"></i>
+                <h5 class="card-title mt-2">Sản phẩm</h5>
+                <p class="fs-4 fw-bold">@ViewBag.TotalProducts</p>
+            </div>
+        </a>
+
+        <a href="@Url.Action("HoaDonAdmin", "HoaDonAdmin", new { area = "Admin" })" class="card text-center shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-file-invoice fa-2x text-warning"></i>
+                <h5 class="card-title mt-2">Đơn hàng</h5>
+                <p class="fs-4 fw-bold">@ViewBag.TotalOrders</p>
+            </div>
+        </a>
+
+        <a href="@Url.Action("BaoCao", "BaoCao", new { area = "Admin" })" class="card text-center shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-dollar-sign fa-2x text-danger"></i>
+                <h5 class="card-title mt-2">Doanh thu</h5>
+                <p class="fs-4 fw-bold">@String.Format("{0:N0} VNĐ", ViewBag.Revenue)</p>
+            </div>
+        </a>
+    </div>
+</div>
