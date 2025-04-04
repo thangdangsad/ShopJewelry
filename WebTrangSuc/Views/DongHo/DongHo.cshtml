@@ -105,8 +105,8 @@
                                 </div>
                             </div>
                             <div class="hover-buttons mt-2">
-                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Mua ngay</a>
-                                @*<a href="@Url.Action("ThanhToan", "ThanhToan", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>*@
+                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-outline-dark btn-sm">Chi tiết</a>
+                                <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.SanPhamID })" class="btn btn-dark btn-sm">Mua ngay</a>
                             </div>
                         </div>
                     </div>
@@ -165,19 +165,20 @@
 
 
     @section scripts {
-        <script>
- $(document).on('click', '#detailBtn', function() {
- var productId = $(this).data('id');
- if (productId) {
-     // Đóng modal
-     $('#productDetailModal').modal('hide');
+    <script>
 
-     // Chuyển hướng đến trang chi tiết sản phẩm
-     window.location.href = '@Url.Action("ChiTiet", "SanPham")/' + productId;
-     }
- });
- $(document).ready(function () {
-     var stockQty = 0;
+    $(document).on('click', '#detailBtn', function() {
+    var productId = $(this).data('id');
+    if (productId) {
+        // Đóng modal
+        $('#productDetailModal').modal('hide');
+
+        // Chuyển hướng đến trang chi tiết sản phẩm
+        window.location.href = '@Url.Action("ChiTiet", "SanPham")/' + productId;
+        }
+    });
+    $(document).ready(function () {
+        var stockQty = 0;
 
 
      // Click mở modal chi tiết sản phẩm

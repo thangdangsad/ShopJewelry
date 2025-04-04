@@ -142,71 +142,78 @@ namespace WebTrangSuc.Controllers
 
 
 
-        // Thêm vào GioHangController.cs
-        //[HttpPost]
-        //public ActionResult MuaNgay(int id, int soLuong)
-        //{
-        //    if (Session["NguoiDungID"] == null)
-        //    {
-        //        return Json(new { success = false, message = "Bạn cần đăng nhập để mua hàng!" });
-        //    }
 
-        //    int nguoiDungID = Convert.ToInt32(Session["NguoiDungID"]);
-
-        //    // Xóa giỏ hàng hiện tại (nếu có)
-        //    var currentCartItems = db.GioHangs.Where(g => g.NguoiDungID == nguoiDungID).ToList();
-        //    db.GioHangs.RemoveRange(currentCartItems);
-
-        //    // Thêm sản phẩm muốn mua ngay vào giỏ hàng
-        //    var gioHangItem = new GioHang
-        //    {
-        //        NguoiDungID = nguoiDungID,
-        //        SanPhamID = id,
-        //        SoLuong = soLuong
-        //    };
-        //    db.GioHangs.Add(gioHangItem);
-
-        //    db.SaveChanges();
-
-        //    return Json(new { success = true });
-        //}
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // Bỏ nếu không sử dụng
         public ActionResult MuaNgay(int id, int soLuong)
         {
-            if (Session["NguoiDungID"] == null)
-            {
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    Response.StatusCode = 401; // Unauthorized
-                    return Content("Unauthorized", "text/plain");
-                }
-                return RedirectToAction("Login", "Login");
-            }
-
-            int nguoiDungID = Convert.ToInt32(Session["NguoiDungID"]);
-
             try
             {
-                // Xóa giỏ hàng hiện tại
-                var currentCartItems = db.GioHangs.Where(g => g.NguoiDungID == nguoiDungID).ToList();
-                db.GioHangs.RemoveRange(currentCartItems);
+                // Kiểm tra đăng nhập
+                if (Session["NguoiDungID"] == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Vui lòng đăng nhập",
+                        requireLogin = true
+                    }, JsonRequestBehavior.AllowGet);
+                }
 
-                // Thêm sản phẩm mới
-                var gioHangItem = new GioHang
+                int nguoiDungID = (int)Session["NguoiDungID"];
+
+                // Xóa giỏ hàng hiện tại
+                var currentItems = db.GioHangs.Where(g => g.NguoiDungID == nguoiDungID).ToList();
+                db.GioHangs.RemoveRange(currentItems);
+
+                // Kiểm tra số lượng tồn kho
+                var sanPham = db.SanPhams.Find(id);
+                if (sanPham == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Sản phẩm không tồn tại"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (sanPham.SoLuong < soLuong)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = $"Chỉ còn {sanPham.SoLuong} sản phẩm trong kho"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                //// Thêm vào giỏ hàng
+                var newItem = new GioHang
                 {
                     NguoiDungID = nguoiDungID,
                     SanPhamID = id,
-                    SoLuong = soLuong
+                    SoLuong = soLuong,
+
                 };
-                db.GioHangs.Add(gioHangItem);
+
+                db.GioHangs.Add(newItem);
                 db.SaveChanges();
 
-                return Json(new { success = true });
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("ThanhToan", "ThanhToan")
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                // Log lỗi
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Lỗi hệ thống: " + ex.Message
+                }, JsonRequestBehavior.AllowGet);
             }
         }
 
